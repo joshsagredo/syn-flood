@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/bilalcaliskan/syn-flood/pkg/raw"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"golang.org/x/net/ipv4"
@@ -28,13 +29,8 @@ func main() {
 	srcIp = net.ParseIP(srcIpStr).To4()
 	dstIp = net.ParseIP(dstIpStr).To4()
 
-	// build tcp/ip packet
-	packet := layers.IPv4{
-		SrcIP: srcIp,
-		DstIP: dstIp,
-		Version: 4,
-		TTL: 64,
-	}
+	// build raw/ip packet
+	packet := raw.CreatePacket(srcIp, dstIp)
 
 	srcPort := layers.TCPPort(666)
 	dstPort := layers.TCPPort(443)
