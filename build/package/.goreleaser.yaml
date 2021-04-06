@@ -1,0 +1,83 @@
+---
+project_name: syn-flood
+
+env:
+  - CGO_ENABLED=0
+  - GO111MODULE=auto
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod download
+
+archives:
+  - replacements:
+      amd64: x86_64
+    files:
+      - build/ci/banner.txt
+      - README.md
+      - LICENSE
+
+builds:
+  - id: binary
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+    binary: syn-flood
+    ldflags:
+      - -s -w -X github.com/bilalcaliskan/syn-flood/internal/version.gitVersion={{ .Version }} -X github.com/bilalcaliskan/syn-flood/internal/version.gitCommit={{ .ShortCommit }}  -X github.com/bilalcaliskan/syn-flood/internal/version.buildDate={{ .CommitDate }}
+    main: ./main.go
+
+dockers:
+  - image_templates:
+      - "docker.io/bilalcaliskan/{{ .ProjectName }}:{{ .Version }}"
+      - "docker.io/bilalcaliskan/{{ .ProjectName }}:latest"
+    dockerfile: build/package/Dockerfile.goreleaser
+    goos: linux
+    goarch: amd64
+    use: docker
+    extra_files:
+      - build/ci/banner.txt
+    build_flag_templates:
+      - --pull
+      - --platform=linux/amd64
+      - --label=org.opencontainers.image.title={{ .ProjectName }}
+      - --label=org.opencontainers.image.description={{ .ProjectName }}
+      - --label=org.opencontainers.image.url=https://github.com/bilalcaliskan/syn-flood
+      - --label=org.opencontainers.image.source=https://github.com/bilalcaliskan/syn-flood
+      - --label=org.opencontainers.image.version={{ .Version }}
+      - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+      - --label=org.opencontainers.image.licenses=Apache
+
+brews:
+  - name: syn-flood
+    tap:
+      owner: bilalcaliskan
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    goarm: 6
+    homepage: https://github.com/bilalcaliskan/syn-flood
+    license: apache-2.0
+    description: syn-flood starts a syn flood attack with raw sockets. created for learning low level network ops
+
+release:
+  github:
+    owner: bilalcaliskan
+    name: syn-flood
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^build:'
+      - '^style:'
+      - 'README'
+      - '^Merge branch'
+      - '^Merge pull request'
