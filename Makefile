@@ -5,7 +5,7 @@ build:
 	go build -o bin/main cmd/syn-flood/main.go
 
 run:
-	go run cmd/syn-flood/main.go
+	sudo /usr/local/go/bin/go run cmd/syn-flood/main.go
 
 cross-compile:
 	# 32-Bit Systems

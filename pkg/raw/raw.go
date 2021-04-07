@@ -20,6 +20,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		// https://pkg.go.dev/github.com/google/gopacket
 		// https://github.com/david415/HoneyBadger/blob/021246788e58cedf88dee75ac5dbf7ae60e12514/packetSendTest.go
 		// free proxies -> https://www.sslproxies.org/
+		// mac spoofing -> https://github.com/google/gopacket/issues/153
 
 		var srcIp, dstIp net.IP
 		srcIpStr := "117.58.245.110"
