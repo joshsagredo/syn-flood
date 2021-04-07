@@ -5,7 +5,6 @@ import (
 	"github.com/google/gopacket/layers"
 	"github.com/schollz/progressbar/v3"
 	"golang.org/x/net/ipv4"
-	"math/rand"
 	"net"
 	"time"
 )
@@ -96,14 +95,4 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		}
 		time.Sleep(800 * time.Millisecond)
 	}
-}
-
-func getRandomPort() int {
-	return 0
-}
-
-func getRandomPayload(length int) []byte {
-	payload := make([]byte, length)
-	rand.Read(payload)
-	return payload
 }
