@@ -88,6 +88,10 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		}
 
 		err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil)
+		if err != nil {
+			panic(err)
+		}
+
 		// log.Printf("packet of length %d sent!\n", len(tcpPayloadBuf.Bytes()) + len(ipHeaderBuf.Bytes()))
 		err = bar.Add(payloadLength)
 		if err != nil {
