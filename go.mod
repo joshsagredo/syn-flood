@@ -3,6 +3,7 @@ module github.com/bilalcaliskan/syn-flood
 go 1.16
 
 require (
+	github.com/dimiro1/banner v1.1.0
 	github.com/google/gopacket v1.1.19
 	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/schollz/progressbar/v3 v3.7.6
