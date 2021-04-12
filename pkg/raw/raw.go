@@ -44,6 +44,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		// https://pkg.go.dev/github.com/google/gopacket
 		// https://github.com/david415/HoneyBadger/blob/021246788e58cedf88dee75ac5dbf7ae60e12514/packetSendTest.go
 		// mac spoofing -> https://github.com/google/gopacket/issues/153
+		// free proxies -> https://www.sslproxies.org/
 
 		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
 		tcpPacket := buildTcpPacket(int(srcPorts[rand.Intn(len(srcPorts))]), dstPort)
