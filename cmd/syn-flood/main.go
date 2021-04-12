@@ -14,7 +14,7 @@ var (
 func init() {
 	flag.StringVar(&dstIpStr, "dstIpStr", "213.238.175.187", "Provide public ip of the destination")
 	flag.IntVar(&dstPort, "dstPort", 443, "Provide reachable port of the destination")
-	flag.IntVar(&payloadLength, "payloadLength", 104, "Provide payload length in bytes for each SYN packet")
+	flag.IntVar(&payloadLength, "payloadLength", 1400, "Provide payload length in bytes for each SYN packet")
 	flag.Parse()
 }
 
