@@ -1,5 +1,5 @@
 test:
-	go test ./...
+	sudo /usr/local/go/bin/go test ./...
 
 build:
 	go build -o bin/main cmd/syn-flood/main.go
