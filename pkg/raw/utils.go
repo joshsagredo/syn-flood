@@ -29,3 +29,21 @@ func getPorts() []int {
 
 	return ports
 }
+
+func getMacAddrs() [][]byte {
+	macAddrs := make([][]byte, 0)
+	for i := 0; i <= 50; i++ {
+		buf := make([]byte, 6)
+		_, err := rand.Read(buf)
+		if err != nil {
+			fmt.Println("error:", err)
+			continue
+		}
+		macAddrs = append(macAddrs, buf)
+
+		//macAddrs = append(macAddrs, fmt.Sprintf("%02x:%02x:%02x:%02x:%02x:%02x", buf[0], buf[1], buf[2], buf[3],
+		//	buf[4], buf[5], buf[6], buf[7]))
+	}
+
+	return macAddrs
+}

