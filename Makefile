@@ -1,3 +1,16 @@
+lint:
+	golangci-lint run
+
+fmt:
+	go fmt ./...
+
+vet:
+	go vet ./...
+
+ineffassign:
+	go get -u github.com/gordonklaus/ineffassign
+	ineffassign ./...
+
 test:
 	sudo go test ./...
 

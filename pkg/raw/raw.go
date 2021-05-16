@@ -13,7 +13,7 @@ import (
 
 var (
 	logger *zap.Logger
-	err error
+	err    error
 )
 
 func init() {
@@ -22,6 +22,7 @@ func init() {
 	logger, err = zap.NewProduction()
 }
 
+// StartFlooding does the heavy lifting, starts the flood
 func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 	defer func() {
 		err = logger.Sync()
@@ -128,13 +129,13 @@ func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
 		SrcPort: layers.TCPPort(srcPort),
 		DstPort: layers.TCPPort(dstPort),
 		//Window:  1505,
-		Window:  14600,
+		Window: 14600,
 		// Urgent:  0,
 		//Seq:     11050,
-		Seq:     1105024978,
+		Seq: 1105024978,
 		// Ack:     0,
-		SYN:     true,
-		ACK: 	 false,
+		SYN: true,
+		ACK: false,
 	}
 }
 

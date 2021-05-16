@@ -12,11 +12,11 @@ func TestStartFlooding(t *testing.T) {
 	srcIps := getIps()
 	srcPorts := getPorts()
 	macAddrs := getMacAddrs()
-	cases := []struct{
-		name string
+	cases := []struct {
+		name                            string
 		payloadLength, srcPort, dstPort int
-		srcIp, dstIp string
-		srcMacAddr, dstMacAddr []byte
+		srcIp, dstIp                    string
+		srcMacAddr, dstMacAddr          []byte
 	}{
 		{"500byte", 500, srcPorts[rand.Intn(len(srcPorts))], 443,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
@@ -88,8 +88,5 @@ func TestStartFlooding(t *testing.T) {
 		})
 
 	}
-
-
-
 
 }

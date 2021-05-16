@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	dstIpStr string
+	dstIpStr               string
 	dstPort, payloadLength int
 )
 
