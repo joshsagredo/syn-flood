@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/bilalcaliskan/syn-flood/pkg/raw"
-	_ "github.com/dimiro1/banner/autoload"
 	flag "github.com/spf13/pflag"
 )
 
