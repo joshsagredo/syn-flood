@@ -1,17 +1,17 @@
 package options
 
 import (
-	"flag"
 	"github.com/spf13/pflag"
 )
 
 var synFloodOptions = &SynFloodOptions{}
 
 func init() {
-	synFloodOptions.AddFlags(pflag.CommandLine)
+	synFloodOptions.addFlags(pflag.CommandLine)
 	pflag.Parse()
 }
 
+// GetSynFloodOptions returns the pointer of SynFloodOptions
 func GetSynFloodOptions() *SynFloodOptions {
 	return synFloodOptions
 }
@@ -26,12 +26,8 @@ type SynFloodOptions struct {
 	PayloadLength int
 }
 
-func (sfo *SynFloodOptions) AddFlags(fs *pflag.FlagSet) {
+func (sfo *SynFloodOptions) addFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&sfo.DstIpStr, "dstIpStr", "213.238.175.187", "Provide public ip of the destination")
 	fs.IntVar(&sfo.DstPort, "dstPort", 443, "Provide reachable port of the destination")
 	fs.IntVar(&sfo.PayloadLength, "payloadLength", 1400, "Provide payload length in bytes for each SYN packet")
-}
-
-func init() {
-	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 }
