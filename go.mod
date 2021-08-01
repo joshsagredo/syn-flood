@@ -9,10 +9,12 @@ require (
 	github.com/rogpeppe/go-internal v1.3.0 // indirect
 	github.com/schollz/progressbar/v3 v3.8.2
 	github.com/spf13/pflag v1.0.5
-	go.uber.org/atomic v1.8.0 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/tools v0.0.0-20190618225709-2cfd321de3ee // indirect
-	go.uber.org/zap v1.17.0
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+	go.uber.org/zap v1.18.1
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	honnef.co/go/tools v0.2.0 // indirect
 )
