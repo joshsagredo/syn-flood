@@ -2,10 +2,20 @@ package main
 
 import (
 	"github.com/bilalcaliskan/syn-flood/pkg/options"
-	"github.com/bilalcaliskan/syn-flood/pkg/raw"
+	"github.com/dimiro1/banner"
+	"io/ioutil"
+	"log"
+	"os"
+	"strings"
 )
+
+func init() {
+	dat, _ := ioutil.ReadFile("banner.txt")
+	banner.Init(os.Stdout, true, false, strings.NewReader(string(dat)))
+}
 
 func main() {
 	sfo := options.GetSynFloodOptions()
-	raw.StartFlooding(sfo.DstIpStr, sfo.DstPort, sfo.PayloadLength)
+	log.Println(sfo)
+	// raw.StartFlooding(sfo.DstIpStr, sfo.DstPort, sfo.PayloadLength)
 }
