@@ -10,8 +10,8 @@ import (
 )
 
 func init() {
-	dat, _ := ioutil.ReadFile("banner.txt")
-	banner.Init(os.Stdout, true, false, strings.NewReader(string(dat)))
+	bannerBytes, _ := ioutil.ReadFile("banner.txt")
+	banner.Init(os.Stdout, true, false, strings.NewReader(string(bannerBytes)))
 }
 
 func main() {
