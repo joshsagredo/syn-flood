@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/bilalcaliskan/syn-flood/pkg/options"
+	"github.com/bilalcaliskan/syn-flood/internal/options"
 	"github.com/dimiro1/banner"
 	"io/ioutil"
 	"log"
