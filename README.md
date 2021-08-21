@@ -4,7 +4,7 @@
 [![Docker pulls](https://img.shields.io/docker/pulls/bilalcaliskan/syn-flood)](https://hub.docker.com/r/bilalcaliskan/syn-flood/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bilalcaliskan/syn-flood)](https://goreportcard.com/report/github.com/bilalcaliskan/syn-flood)
 
-This project is developed with the objective of learning low level network operations with Golang. It starts a syn flood attack 
+This project is developed with the objective of learning low level network operations with Golang. It starts a syn flood attack
 with raw sockets. Do not use it with devil needs.
 
 ### Configuration
@@ -25,3 +25,8 @@ Docker image can be downloaded with below command:
 ```shell
 $ docker run bilalcaliskan/syn-flood:latest
 ```
+
+### Development
+This project requires below tools while developing:
+- [pre-commit](https://pre-commit.com/)
+- [golangci-lint](https://golangci-lint.run/usage/install/) - required by [pre-commit](https://pre-commit.com/)
