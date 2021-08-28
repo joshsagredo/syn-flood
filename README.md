@@ -3,6 +3,7 @@
 [![CI](https://github.com/bilalcaliskan/syn-flood/workflows/CI/badge.svg?event=push)](https://github.com/bilalcaliskan/syn-flood/actions?query=workflow%3ACI)
 [![Docker pulls](https://img.shields.io/docker/pulls/bilalcaliskan/syn-flood)](https://hub.docker.com/r/bilalcaliskan/syn-flood/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bilalcaliskan/syn-flood)](https://goreportcard.com/report/github.com/bilalcaliskan/syn-flood)
+[![codecov](https://codecov.io/gh/bilalcaliskan/syn-flood/branch/master/graph/badge.svg)](https://codecov.io/gh/bilalcaliskan/syn-flood)
 
 This project is developed with the objective of learning low level network operations with Golang. It starts a syn flood attack
 with raw sockets. Do not use it with devil needs.

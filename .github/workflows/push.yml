@@ -49,7 +49,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Install Go
         uses: actions/setup-go@v2
@@ -60,12 +60,28 @@ jobs:
       - name: Test
         run: make test
 
-  build:
+  coverage:
+    runs-on: ubuntu-latest
     needs:
       - lint
       - vet
       - ineffassign
       - test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.x
+      - name: Coverage Test
+        run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+      - name: Coverage Upload
+        run: bash <(curl -s https://codecov.io/bash)
+
+  build:
+    needs:
+      - coverage
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
