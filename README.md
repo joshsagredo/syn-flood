@@ -6,7 +6,9 @@
 [![codecov](https://codecov.io/gh/bilalcaliskan/syn-flood/branch/master/graph/badge.svg)](https://codecov.io/gh/bilalcaliskan/syn-flood)
 
 This project is developed with the objective of learning low level network operations with Golang. It starts a syn flood attack
-with raw sockets. Do not use it with devil needs.
+with raw sockets.
+
+> **Please do not use that tool with devil needs.**
 
 ## Prerequisites
 You need root access to run syn-flood
