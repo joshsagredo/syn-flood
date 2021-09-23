@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/bilalcaliskan/syn-flood/internal/options"
+	"github.com/bilalcaliskan/syn-flood/internal/raw"
 	"github.com/dimiro1/banner"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 )
@@ -16,6 +16,5 @@ func init() {
 
 func main() {
 	sfo := options.GetSynFloodOptions()
-	log.Println(sfo)
-	// raw.StartFlooding(sfo.DstIpStr, sfo.DstPort, sfo.PayloadLength)
+	raw.StartFlooding(sfo.DstIpStr, sfo.DstPort, sfo.PayloadLength)
 }

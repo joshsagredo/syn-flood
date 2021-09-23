@@ -1,6 +1,7 @@
 package raw
 
 import (
+	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/schollz/progressbar/v3"
@@ -19,7 +20,7 @@ var (
 func init() {
 	// initialize global pseudo random generator
 	rand.Seed(time.Now().Unix())
-	logger, err = zap.NewProduction()
+	logger = logging.GetLogger()
 }
 
 // StartFlooding does the heavy lifting, starts the flood

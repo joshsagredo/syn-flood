@@ -15,6 +15,5 @@ repos:
       - id: go-imports
       - id: validate-toml
       - id: golangci-lint
-      - id: go-unit-tests
       - id: go-build
       - id: go-mod-tidy
