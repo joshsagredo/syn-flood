@@ -34,7 +34,7 @@ func TestStartFlooding(t *testing.T) {
 			_, cancel := context.WithTimeout(context.Background(), time.Duration(tc.floodSeconds)*time.Second)
 			defer cancel()
 			t.Logf("starting flood, caseName=%s\n", tc.name)
-			go StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength)
+			StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength)
 		})
 	}
 }
