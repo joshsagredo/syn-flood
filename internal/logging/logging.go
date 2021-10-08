@@ -11,7 +11,7 @@ var logger *zap.Logger
 func init() {
 	cfgConsole := zapcore.EncoderConfig{
 		MessageKey:   "message",
-		LevelKey:     "severity",
+		LevelKey:     "level",
 		EncodeLevel:  zapcore.LowercaseLevelEncoder,
 		TimeKey:      "time",
 		EncodeTime:   zapcore.RFC3339TimeEncoder,
