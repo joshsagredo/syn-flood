@@ -1,6 +1,7 @@
 package raw
 
 import (
+	"context"
 	"math/rand"
 	"testing"
 	"time"
@@ -30,10 +31,10 @@ func TestStartFlooding(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			_, cancel := context.WithTimeout(context.Background(), time.Duration(tc.floodSeconds)*time.Second)
+			defer cancel()
 			t.Logf("starting flood, caseName=%s\n", tc.name)
 			go StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength)
-			time.Sleep(time.Duration(tc.floodSeconds) * time.Second)
-			t.Logf("ending flood, caseName=%s\n", tc.name)
 		})
 	}
 }
