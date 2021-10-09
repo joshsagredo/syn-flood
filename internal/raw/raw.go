@@ -109,7 +109,6 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		if err != nil {
 			panic(err)
 		}
-		// time.Sleep(800 * time.Millisecond)
 	}
 }
 
