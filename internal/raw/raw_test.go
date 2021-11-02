@@ -14,33 +14,33 @@ func TestStartFlooding(t *testing.T) {
 	cases := []struct {
 		name                            string
 		payloadLength, srcPort, dstPort int
-		floodSeconds                    int64
+		floodMilliSeconds               int64
 		srcIp, dstIp                    string
 		srcMacAddr, dstMacAddr          []byte
 	}{
-		{"500byte", 500, srcPorts[rand.Intn(len(srcPorts))], 443, 1,
+		{"500byte", 500, srcPorts[rand.Intn(len(srcPorts))], 443, 500,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
-		{"1000byte", 1000, srcPorts[rand.Intn(len(srcPorts))], 443, 1,
+		{"1000byte", 1000, srcPorts[rand.Intn(len(srcPorts))], 443, 500,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
-		{"1400byte", 1400, srcPorts[rand.Intn(len(srcPorts))], 443, 1,
+		{"1400byte", 1400, srcPorts[rand.Intn(len(srcPorts))], 443, 500,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(tc.floodSeconds)*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(tc.floodMilliSeconds)*time.Millisecond)
 			defer cancel()
-			t.Logf("starting flood, caseName=%s, floodSeconds=%d\n", tc.name, tc.floodSeconds)
+			t.Logf("starting flood, caseName=%s, floodMilliSeconds=%d\n", tc.name, tc.floodMilliSeconds)
 			go StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength)
 
 			select {
 			case <-time.After(120 * time.Second):
 				t.Log("overslept")
 			case <-ctx.Done():
-				t.Logf("ending flood, caseName=%s, floodSeconds=%d\n", tc.name, tc.floodSeconds)
+				t.Logf("ending flood, caseName=%s, floodMilliSeconds=%d\n", tc.name, tc.floodMilliSeconds)
 				t.Logf(time.Now().String())
 			}
 		})
