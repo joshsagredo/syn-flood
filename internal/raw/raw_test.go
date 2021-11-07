@@ -34,7 +34,13 @@ func TestStartFlooding(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(tc.floodMilliSeconds)*time.Millisecond)
 			defer cancel()
 			t.Logf("starting flood, caseName=%s, floodMilliSeconds=%d\n", tc.name, tc.floodMilliSeconds)
-			go StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength)
+			go func() {
+				if err := StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength); err != nil {
+					t.Errorf("an error occured on flooding process, caseName=%s, floodMilliSeconds=%d, "+
+						"error=%s\n", tc.name, tc.floodMilliSeconds, err.Error())
+					return
+				}
+			}()
 
 			select {
 			case <-time.After(120 * time.Second):
