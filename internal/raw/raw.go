@@ -6,6 +6,7 @@ import (
 	"github.com/google/gopacket/layers"
 	"github.com/schollz/progressbar/v3"
 	"golang.org/x/net/ipv4"
+	"log"
 	"math/rand"
 	"net"
 	"time"
@@ -88,6 +89,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
 			return err
 		}
+
+		log.Println("success packet sending")
 
 		if err = bar.Add(payloadLength); err != nil {
 			return err
