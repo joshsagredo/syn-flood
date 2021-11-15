@@ -19,13 +19,13 @@ func TestStartFlooding(t *testing.T) {
 		srcIp, dstIp                    string
 		srcMacAddr, dstMacAddr          []byte
 	}{
-		{"500byte", 500, srcPorts[rand.Intn(len(srcPorts))], 443, 50,
+		{"500byte", 500, srcPorts[rand.Intn(len(srcPorts))], 443, 500,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
-		{"1000byte", 1000, srcPorts[rand.Intn(len(srcPorts))], 443, 50,
+		{"1000byte", 1000, srcPorts[rand.Intn(len(srcPorts))], 443, 500,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
-		{"1400byte", 1400, srcPorts[rand.Intn(len(srcPorts))], 443, 50,
+		{"1400byte", 1400, srcPorts[rand.Intn(len(srcPorts))], 443, 500,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
 	}
