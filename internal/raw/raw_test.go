@@ -8,7 +8,6 @@ import (
 )
 
 func TestStartFlooding(t *testing.T) {
-	var err error
 	srcIps := getIps()
 	srcPorts := getPorts()
 	macAddrs := getMacAddrs()
@@ -33,7 +32,8 @@ func TestStartFlooding(t *testing.T) {
 			defer cancel()
 			t.Logf("starting flood, caseName=%s, floodMilliSeconds=%d\n", tc.name, tc.floodMilliSeconds)
 			go func() {
-				if err = StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength); err != nil {
+				err := StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength)
+				if err != nil {
 					t.Errorf("an error occured on flooding process, caseName=%s, floodMilliSeconds=%d, "+
 						"error=%s\n", tc.name, tc.floodMilliSeconds, err.Error())
 					return
