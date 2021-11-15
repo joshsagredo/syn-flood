@@ -2,23 +2,18 @@ package raw
 
 import (
 	"fmt"
-	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/schollz/progressbar/v3"
-	"go.uber.org/zap"
 	"golang.org/x/net/ipv4"
 	"math/rand"
 	"net"
 	"time"
 )
 
-var logger *zap.Logger
-
 func init() {
 	// initialize global pseudo random generator
 	rand.Seed(time.Now().Unix())
-	logger = logging.GetLogger()
 }
 
 // StartFlooding does the heavy lifting, starts the flood
@@ -29,12 +24,6 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		rawConn    *ipv4.RawConn
 		err        error
 	)
-
-	defer func() {
-		if err := logger.Sync(); err != nil {
-			panic(err)
-		}
-	}()
 
 	description := fmt.Sprintf("Flood is in progress on %s:%d with payload length %d", dstIpStr, dstPort, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
