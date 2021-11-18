@@ -57,6 +57,7 @@ This project requires below tools while developing:
 - free proxies -> https://www.sslproxies.org/
 - [What is an ACK flood DDoS attack? | Types of DDoS attacks](https://www.cloudflare.com/tr-tr/learning/ddos/what-is-an-ack-flood/)
 - https://bariskoparmal.com/2021/08/22/spesifik-ddos-saldirilari-ve-saldiri-komutlari/
+- https://github.blog/2016-07-12-syn-flood-mitigation-with-synsanity/
 
 ## License
 Apache License 2.0
