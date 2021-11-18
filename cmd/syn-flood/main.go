@@ -17,7 +17,7 @@ func init() {
 
 func main() {
 	sfo := options.GetSynFloodOptions()
-	if err := raw.StartFlooding(sfo.DstIpStr, sfo.DstPort, sfo.PayloadLength); err != nil {
+	if err := raw.StartFlooding(sfo.DstIpStr, sfo.DstPort, sfo.PayloadLength, sfo.FloodType); err != nil {
 		log.Fatalf("an error occured on flooding process: %s", err.Error())
 	}
 }
