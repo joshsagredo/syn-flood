@@ -45,5 +45,18 @@ This project requires below tools while developing:
 - [pre-commit](https://pre-commit.com/)
 - [golangci-lint](https://golangci-lint.run/usage/install/) - required by [pre-commit](https://pre-commit.com/)
 
+## References
+- https://www.devdungeon.com/content/packet-capture-injection-and-analysis-gopacket
+- https://www.programmersought.com/article/74831586115/
+- https://github.com/rootVIII/gosynflood
+- https://golangexample.com/repeatedly-send-crafted-tcp-syn-packets-with-raw-sockets/
+- https://github.com/kdar/gorawtcpsyn/blob/master/main.go
+- https://pkg.go.dev/github.com/google/gopacket
+- https://github.com/david415/HoneyBadger/blob/021246788e58cedf88dee75ac5dbf7ae60e12514/packetSendTest.go
+- mac spoofing -> https://github.com/google/gopacket/issues/153
+- free proxies -> https://www.sslproxies.org/
+- [What is an ACK flood DDoS attack? | Types of DDoS attacks](https://www.cloudflare.com/tr-tr/learning/ddos/what-is-an-ack-flood/)
+- https://bariskoparmal.com/2021/08/22/spesifik-ddos-saldirilari-ve-saldiri-komutlari/
+
 ## License
 Apache License 2.0
