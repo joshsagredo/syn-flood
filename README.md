@@ -19,9 +19,10 @@ You need root access to run syn-flood
 ## Configuration
 syn-flood can be customized with several command line arguments:
 ```
---dstIpStr                  Provide public ip of the destination
---dstPort                   Provide reachable port of the destination
---payloadLength             Provide payload length in bytes for each SYN packet
+--host                          Provide public ip or DNS of the target
+--port                          Provide reachable port of the target
+--payloadLength                 Provide payload length in bytes for each packet
+--floodType                     Provide the attack type. Proper values are: syn, ack, synack
 ```
 
 ## Download
@@ -30,7 +31,12 @@ Binary can be downloaded from [Releases](https://github.com/bilalcaliskan/syn-fl
 
 After then, you can simply run binary by providing required command line arguments:
 ```shell
-$ sudo ./syn-flood --dstIpStr 10.0.0.100 --dstPort 443
+$ sudo ./syn-flood --host 10.0.0.100 --port 443
+```
+
+Or with DNS:
+```shell
+$ sudo ./syn-flood --host foo.example.com --port 443
 ```
 
 ### Docker
