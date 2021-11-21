@@ -13,7 +13,7 @@ ineffassign:
 	ineffassign ./...
 
 test:
-	sudo go test ./...
+	sudo go test ./... -v
 
 build:
 	go build -o bin/main cmd/syn-flood/main.go
