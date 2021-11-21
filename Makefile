@@ -13,6 +13,7 @@ ineffassign:
 	ineffassign ./...
 
 test:
+	sudo ulimit -n 3000
 	sudo go test ./... -v
 
 build:
