@@ -13,7 +13,7 @@ ineffassign:
 	ineffassign ./...
 
 test:
-	sudo ulimit -n 3000
+	sudo sysctl -w fs.file-max=100000
 	sudo go test ./... -v
 
 build:
