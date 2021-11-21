@@ -13,16 +13,31 @@ import (
 	"strings"
 )
 
+const (
+	IpRegex  = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+	DnsRegex = "^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+)
+
+var (
+	isIP, isDNS bool
+	err         error
+	sfo         = options.GetSynFloodOptions()
+	host        = sfo.Host
+)
+
 func init() {
 	bannerBytes, _ := ioutil.ReadFile("banner.txt")
 	banner.Init(os.Stdout, true, false, strings.NewReader(string(bannerBytes)))
 }
 
 func main() {
-	sfo := options.GetSynFloodOptions()
-	host := sfo.Host
-	isIP, _ := regexp.MatchString("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", host)
-	isDNS, _ := regexp.MatchString("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\\-]*[A-Za-z0-9])$", host)
+	if isIP, err = regexp.MatchString(IpRegex, host); err != nil {
+		log.Fatalf("a fatal error occured while matching provided --host with IP regex: %s", err.Error())
+	}
+
+	if isDNS, err = regexp.MatchString(DnsRegex, host); err != nil {
+		log.Fatalf("a fatal error occured while matching provided --host with DNS regex: %s", err.Error())
+	}
 
 	if !isIP && isDNS {
 		log.Printf("%s is a DNS record, making DNS lookup\n", host)
@@ -35,7 +50,7 @@ func main() {
 		host = ipRecords[0].String()
 	}
 
-	if err := raw.StartFlooding(host, sfo.Port, sfo.PayloadLength, sfo.FloodType); err != nil {
+	if err = raw.StartFlooding(host, sfo.Port, sfo.PayloadLength, sfo.FloodType); err != nil {
 		log.Fatalf("an error occured on flooding process: %s", err.Error())
 	}
 }
