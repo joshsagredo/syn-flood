@@ -19,9 +19,10 @@ You need root access to run syn-flood
 ## Configuration
 syn-flood can be customized with several command line arguments:
 ```
---dstIpStr                  Provide public ip of the destination
---dstPort                   Provide reachable port of the destination
---payloadLength             Provide payload length in bytes for each SYN packet
+--host                          Provide public ip or DNS of the target
+--port                          Provide reachable port of the target
+--payloadLength                 Provide payload length in bytes for each packet
+--floodType                     Provide the attack type. Proper values are: syn, ack, synack
 ```
 
 ## Download
@@ -30,7 +31,12 @@ Binary can be downloaded from [Releases](https://github.com/bilalcaliskan/syn-fl
 
 After then, you can simply run binary by providing required command line arguments:
 ```shell
-$ sudo ./syn-flood --dstIpStr 10.0.0.100 --dstPort 443
+$ sudo ./syn-flood --host 10.0.0.100 --port 443
+```
+
+Or with DNS:
+```shell
+$ sudo ./syn-flood --host foo.example.com --port 443
 ```
 
 ### Docker
@@ -44,6 +50,20 @@ This project requires below tools while developing:
 - [Golang 1.16](https://golang.org/doc/go1.16)
 - [pre-commit](https://pre-commit.com/)
 - [golangci-lint](https://golangci-lint.run/usage/install/) - required by [pre-commit](https://pre-commit.com/)
+
+## References
+- https://www.devdungeon.com/content/packet-capture-injection-and-analysis-gopacket
+- https://www.programmersought.com/article/74831586115/
+- https://github.com/rootVIII/gosynflood
+- https://golangexample.com/repeatedly-send-crafted-tcp-syn-packets-with-raw-sockets/
+- https://github.com/kdar/gorawtcpsyn/blob/master/main.go
+- https://pkg.go.dev/github.com/google/gopacket
+- https://github.com/david415/HoneyBadger/blob/021246788e58cedf88dee75ac5dbf7ae60e12514/packetSendTest.go
+- mac spoofing -> https://github.com/google/gopacket/issues/153
+- free proxies -> https://www.sslproxies.org/
+- [What is an ACK flood DDoS attack? | Types of DDoS attacks](https://www.cloudflare.com/tr-tr/learning/ddos/what-is-an-ack-flood/)
+- https://bariskoparmal.com/2021/08/22/spesifik-ddos-saldirilari-ve-saldiri-komutlari/
+- https://github.blog/2016-07-12-syn-flood-mitigation-with-synsanity/
 
 ## License
 Apache License 2.0
