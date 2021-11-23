@@ -3,6 +3,7 @@
 [![CI](https://github.com/bilalcaliskan/syn-flood/workflows/CI/badge.svg?event=push)](https://github.com/bilalcaliskan/syn-flood/actions?query=workflow%3ACI)
 [![Docker pulls](https://img.shields.io/docker/pulls/bilalcaliskan/syn-flood)](https://hub.docker.com/r/bilalcaliskan/syn-flood/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bilalcaliskan/syn-flood)](https://goreportcard.com/report/github.com/bilalcaliskan/syn-flood)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bilalcaliskan_syn-flood&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bilalcaliskan_syn-flood)
 [![codecov](https://codecov.io/gh/bilalcaliskan/syn-flood/branch/master/graph/badge.svg)](https://codecov.io/gh/bilalcaliskan/syn-flood)
 [![Release](https://img.shields.io/github/release/bilalcaliskan/syn-flood.svg)](https://github.com/bilalcaliskan/syn-flood/releases/latest)
 [![Go version](https://img.shields.io/github/go-mod/go-version/bilalcaliskan/syn-flood)](https://github.com/bilalcaliskan/syn-flood)
