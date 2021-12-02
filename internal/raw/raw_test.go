@@ -39,6 +39,7 @@ func TestStartFlooding(t *testing.T) {
 			}()
 
 			select {
+
 			case <-time.After(120 * time.Second):
 				t.Log("overslept")
 			case <-ctx.Done():
