@@ -25,7 +25,7 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int, floodType string
 		err        error
 	)
 
-	description := fmt.Sprintf("Flood is in progress on %s:%d with flood type %s with payload length %d",
+	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d",
 		dstIpStr, dstPort, floodType, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
 
@@ -89,9 +89,9 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int, floodType string
 // buildIpPacket generates a layers.IPv4 and returns it with source IP address and destination IP address
 func buildIpPacket(srcIpStr, dstIpStr string) *layers.IPv4 {
 	return &layers.IPv4{
-		SrcIP: net.ParseIP(srcIpStr).To4(),
-		DstIP: net.ParseIP(dstIpStr).To4(),
-		Version: 4,
+		SrcIP:    net.ParseIP(srcIpStr).To4(),
+		DstIP:    net.ParseIP(dstIpStr).To4(),
+		Version:  4,
 		Protocol: layers.IPProtocolTCP,
 	}
 }
