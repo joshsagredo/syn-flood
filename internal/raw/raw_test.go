@@ -2,6 +2,7 @@ package raw
 
 import (
 	"context"
+	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
 	"time"
@@ -31,11 +32,7 @@ func TestStartFlooding(t *testing.T) {
 			t.Logf("starting flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			go func() {
 				err := StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength, tc.floodType)
-				if err != nil {
-					t.Errorf("an error occured on flooding process, caseName=%s, floodMilliSeconds=%d, "+
-						"error=%s\n", tc.name, tc.floodMilliSeconds, err.Error())
-					return
-				}
+				assert.Nil(t, err)
 			}()
 
 			select {
