@@ -11,6 +11,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const (
@@ -23,6 +24,8 @@ var (
 	err         error
 	sfo         = options.GetSynFloodOptions()
 	host        = sfo.Host
+	ctx         = context.Background()
+	cancel      context.CancelFunc
 )
 
 func init() {
@@ -50,7 +53,20 @@ func main() {
 		host = ipRecords[0].String()
 	}
 
-	if err = raw.StartFlooding(host, sfo.Port, sfo.PayloadLength, sfo.FloodType); err != nil {
-		log.Fatalf("an error occured on flooding process: %s", err.Error())
+	go func() {
+		if err = raw.StartFlooding(host, sfo.Port, sfo.PayloadLength, sfo.FloodType); err != nil {
+			log.Fatalf("an error occured on flooding process: %s", err.Error())
+		}
+	}()
+
+	if sfo.FloodDurationSeconds != -1 {
+		ctx, cancel = context.WithDeadline(ctx, time.Now().Add(time.Duration(sfo.FloodDurationSeconds)*time.Second))
+		defer cancel()
+	}
+
+	for {
+		<-ctx.Done()
+		log.Printf("\n\nexecution completed with specified duration seconds %d\n", sfo.FloodDurationSeconds)
+		os.Exit(0)
 	}
 }

@@ -20,10 +20,11 @@ You need root access to run syn-flood
 ## Configuration
 syn-flood can be customized with several command line arguments:
 ```
---host              string      Provide public ip or DNS of the target
---port              int         Provide reachable port of the target
---payloadLength     int         Provide payload length in bytes for each packet
---floodType         string      Provide the attack type. Proper values are: syn, ack, synack
+--host                  string      Provide public ip or DNS of the target
+--port                  int         Provide reachable port of the target
+--payloadLength         int         Provide payload length in bytes for each packet
+--floodType             string      Provide the attack type. Proper values are: syn, ack, synack
+--floodDurationSeconds  int64       Provide the duration of the attack in seconds, -1 for no limit, defaults to -1
 ```
 
 ## Download
