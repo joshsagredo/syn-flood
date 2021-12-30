@@ -1,19 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"github.com/bilalcaliskan/syn-flood/internal/options"
+	"context"
 	"testing"
+	"time"
 )
 
 func TestMainProgram(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("Recovered in main function", r)
-		}
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+
+	go func() {
+		main()
 	}()
 
-	sfo := options.GetSynFloodOptions()
-	sfo.FloodDurationSeconds = 1
-	main()
+	select {
+	case <-time.After(120 * time.Second):
+		t.Logf("overslept")
+	case <-ctx.Done():
+		t.Logf("ending flood")
+	}
 }
