@@ -43,8 +43,11 @@ cross-compile:
 	# Windows
 	GOOS=windows GOARCH=amd64 go build -o bin/main-windows-amd64 cmd/syn-flood/main.go
 
-upgrade-deps:
-	go get -u ./...
+upgrade-direct-deps:
+	for item in `grep -v 'indirect' go.mod | grep '/' | cut -d ' ' -f 1`; do \
+		echo "trying to upgrade direct dependency $$item" ; \
+		go get -u $$item ; \
+  	done
 	go mod tidy
 	go mod vendor
 
