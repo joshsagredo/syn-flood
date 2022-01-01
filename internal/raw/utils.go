@@ -1,8 +1,12 @@
 package raw
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"math/rand"
+	"net"
+	"regexp"
 )
 
 func getRandomPayload(length int) []byte {
@@ -43,4 +47,45 @@ func getMacAddrs() [][]byte {
 	}
 
 	return macAddrs
+}
+
+func isDNS(host string) bool {
+	var (
+		res bool
+		err error
+	)
+
+	if res, err = regexp.MatchString(DnsRegex, host); err != nil {
+		log.Fatalf("a fatal error occured while matching provided --host with DNS regex: %s", err.Error())
+	}
+
+	return res
+}
+
+func isIP(host string) bool {
+	var (
+		res bool
+		err error
+	)
+
+	if res, err = regexp.MatchString(IpRegex, host); err != nil {
+		log.Fatalf("a fatal error occured while matching provided --host with IP regex: %s", err.Error())
+	}
+
+	return res
+}
+
+func resolveHost(host string) string {
+	if !isIP(host) && isDNS(host) {
+		log.Printf("%s is a DNS record, making DNS lookup\n", host)
+		ipRecords, err := net.DefaultResolver.LookupIP(context.Background(), "ip4", host)
+		if err != nil {
+			log.Fatalf("an error occured on dns lookup: %s", err.Error())
+		}
+
+		log.Printf("dns lookup succeeded, found %s for %s\n", ipRecords[0].String(), host)
+		host = ipRecords[0].String()
+	}
+
+	return host
 }

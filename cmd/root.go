@@ -7,18 +7,11 @@ import (
 	"github.com/dimiro1/banner"
 	"io/ioutil"
 	"log"
-	"net"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
-)
-
-const (
-	IpRegex  = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
-	DnsRegex = "^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\\-]*[A-Za-z0-9])$"
 )
 
 var (
@@ -31,25 +24,6 @@ operations with Golang. It starts a syn flood attack with raw sockets.
 Please do not use that tool with devil needs.
 `,
 		Run: func(cmd *cobra.Command, args []string) {
-			if isIP, err = regexp.MatchString(IpRegex, host); err != nil {
-				log.Fatalf("a fatal error occured while matching provided --host with IP regex: %s", err.Error())
-			}
-
-			if isDNS, err = regexp.MatchString(DnsRegex, host); err != nil {
-				log.Fatalf("a fatal error occured while matching provided --host with DNS regex: %s", err.Error())
-			}
-
-			if !isIP && isDNS {
-				log.Printf("%s is a DNS record, making DNS lookup\n", host)
-				ipRecords, err := net.DefaultResolver.LookupIP(context.Background(), "ip4", host)
-				if err != nil {
-					log.Fatalf("an error occured on dns lookup: %s", err.Error())
-				}
-
-				log.Printf("dns lookup succeeded, found %s for %s\n", ipRecords[0].String(), host)
-				host = ipRecords[0].String()
-			}
-
 			go func() {
 				if err = raw.StartFlooding(host, sfo.Port, sfo.PayloadLength, sfo.FloodType); err != nil {
 					log.Fatalf("an error occured on flooding process: %s", err.Error())
@@ -68,12 +42,11 @@ Please do not use that tool with devil needs.
 			}
 		},
 	}
-	isIP, isDNS bool
-	err         error
-	sfo         = options.GetSynFloodOptions()
-	host        = sfo.Host
-	ctx         = context.Background()
-	cancel      context.CancelFunc
+	err    error
+	sfo    = options.GetSynFloodOptions()
+	host   = sfo.Host
+	ctx    = context.Background()
+	cancel context.CancelFunc
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
