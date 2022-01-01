@@ -1,15 +1,6 @@
 package options
 
-import (
-	"github.com/spf13/pflag"
-)
-
 var synFloodOptions = &SynFloodOptions{}
-
-func init() {
-	synFloodOptions.addFlags(pflag.CommandLine)
-	pflag.Parse()
-}
 
 // GetSynFloodOptions returns the pointer of SynFloodOptions
 func GetSynFloodOptions() *SynFloodOptions {
@@ -28,13 +19,4 @@ type SynFloodOptions struct {
 	FloodType string
 	// FloodDurationSeconds is the duration of the attack with seconds. Defaults to -1 which means
 	FloodDurationSeconds int64
-}
-
-func (sfo *SynFloodOptions) addFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&sfo.Host, "host", "213.238.175.187", "Provide public ip or DNS of the target")
-	fs.IntVar(&sfo.Port, "port", 443, "Provide reachable port of the target")
-	fs.IntVar(&sfo.PayloadLength, "payloadLength", 1400, "Provide payload length in bytes for each SYN packet")
-	fs.StringVar(&sfo.FloodType, "floodType", "syn", "Provide the attack type. Proper values are: syn, ack, synack")
-	fs.Int64Var(&sfo.FloodDurationSeconds, "floodDurationSeconds", -1,
-		"Provide the duration of the attack in seconds, -1 for no limit, defaults to -1")
 }
