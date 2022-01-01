@@ -61,6 +61,7 @@ func Execute() {
 	}
 }
 
+// init function initializes the cmd module
 func init() {
 	opts := options.GetSynFloodOptions()
 

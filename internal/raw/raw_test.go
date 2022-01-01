@@ -22,7 +22,6 @@ func TestStartFlooding(t *testing.T) {
 		{"500byte_syn", "syn", 500, srcPorts[rand.Intn(len(srcPorts))], 443, 100,
 			srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
-		// TODO: other cases like floodType=ack, floodType=synAck. think a solution to "too many open files" error ;)
 	}
 
 	for _, tc := range cases {
