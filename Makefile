@@ -15,7 +15,10 @@ ineffassign:
 test:
 	sudo sysctl -w fs.file-max=100000000
 	sudo sysctl -p
+	sudo which go
+	sudo whoami
 	sudo go test ./... -v
+
 
 build:
 	go build -o bin/main main.go
