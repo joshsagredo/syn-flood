@@ -17,4 +17,4 @@ builds:
       - amd64
     ldflags:
       - -s -w
-    main: ./cmd/syn-flood/main.go
+    main: ./main.go
