@@ -22,11 +22,6 @@ func TestStartFlooding(t *testing.T) {
 		{"100byte_syn", "syn", 100, srcPorts[rand.Intn(len(srcPorts))],
 			443, 100, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
-		{
-			"100byte_ack", "ack", 100, srcPorts[rand.Intn(len(srcPorts))],
-			443, 100, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
-			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
-		},
 	}
 
 	for _, tc := range cases {
@@ -44,7 +39,6 @@ func TestStartFlooding(t *testing.T) {
 				t.Log("overslept")
 			case <-ctx.Done():
 				t.Logf("ending flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
-				time.Sleep(2 * time.Second)
 			}
 		})
 	}
