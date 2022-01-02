@@ -45,11 +45,11 @@ func TestStartFlooding(t *testing.T) {
 			}()
 
 			select {
-
 			case <-time.After(120 * time.Second):
 				t.Log("overslept")
 			case <-ctx.Done():
 				t.Logf("ending flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
+				time.Sleep(2 * time.Second)
 			}
 		})
 	}
