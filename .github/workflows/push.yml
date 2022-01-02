@@ -54,7 +54,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Test
-        run: make test
+        run: |
+          sudo sysctl -w fs.file-max=100000000
+          sudo sysctl -p
+          sudo go test ./... -v
 
   codeql:
     runs-on: ubuntu-latest
