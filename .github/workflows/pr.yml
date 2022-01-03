@@ -56,7 +56,7 @@ jobs:
         run: |
           sudo sysctl -w fs.file-max=100000000
           sudo sysctl -p
-          sudo ulimit -n 500000
+          sudo sh -c "ulimit -n 500000"
           sudo go test ./... -v
 
 #  codeql:
