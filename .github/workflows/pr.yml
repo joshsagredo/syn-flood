@@ -54,9 +54,9 @@ jobs:
           go-version: 1.16.x
       - name: Test
         run: |
-          echo "fs.file-max = 500000" >> /etc/sysctl.conf
-          sysctl -p
-          ulimit -n 500000
+          sudo echo "fs.file-max = 500000" >> /etc/sysctl.conf
+          sudo sysctl -p
+          sudo ulimit -n 500000
           make test
 
 #  codeql:
