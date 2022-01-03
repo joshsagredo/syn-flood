@@ -2,15 +2,12 @@ package raw
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
-	"sync"
 	"testing"
 	"time"
 )
 
 func TestStartFlooding(t *testing.T) {
-	var m sync.Mutex
 	srcIps := getIps()
 	srcPorts := getPorts()
 	macAddrs := getMacAddrs()
@@ -42,10 +39,11 @@ func TestStartFlooding(t *testing.T) {
 			defer cancel()
 			t.Logf("starting flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			go func() {
-				m.Lock()
-				defer m.Unlock()
 				err := StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength, tc.floodType)
-				assert.Nil(t, err)
+				if err != nil {
+					t.Errorf("an error occured on flooding process: %s\n", err.Error())
+					return
+				}
 			}()
 
 			select {
