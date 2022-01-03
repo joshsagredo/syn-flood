@@ -2,7 +2,6 @@ package raw
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
 	"time"
@@ -20,25 +19,39 @@ func TestStartFlooding(t *testing.T) {
 		srcMacAddr, dstMacAddr          []byte
 	}{
 		{"100byte_syn", "syn", 100, srcPorts[rand.Intn(len(srcPorts))],
-			443, 100, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
+			443, 50, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
+		{
+			"100byte_ack", "ack", 100, srcPorts[rand.Intn(len(srcPorts))],
+			443, 50, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
+			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
+		},
+		{
+			"100byte_synack", "synAck", 100, srcPorts[rand.Intn(len(srcPorts))],
+			443, 50, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
+			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
+		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(tc.floodMilliSeconds)*time.Millisecond)
+			ctx, cancel := context.WithTimeout(context.TODO(), time.Duration(tc.floodMilliSeconds)*time.Millisecond)
 			defer cancel()
 			t.Logf("starting flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			go func() {
 				err := StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength, tc.floodType)
-				assert.Nil(t, err)
+				if err != nil {
+					t.Errorf("flooding process returned an error: %s\n", err.Error())
+					return
+				}
+				t.Logf("ending flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			}()
 
 			select {
 			case <-time.After(120 * time.Second):
 				t.Log("overslept")
 			case <-ctx.Done():
-				t.Logf("ending flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
+				t.Logf("context closed, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			}
 		})
 	}
