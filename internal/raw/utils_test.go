@@ -17,7 +17,7 @@ func TestResolveHostSuccess(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.caseName, func(t *testing.T) {
 			_, err := resolveHost(tc.host)
-			assert.NotNil(t, err)
+			assert.Nil(t, err)
 		})
 	}
 }
