@@ -36,7 +36,6 @@ func TestStartFlooding(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.TODO(), time.Duration(tc.floodMilliSeconds)*time.Millisecond)
-			defer cancel()
 			t.Logf("starting flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			go func() {
 				err := StartFlooding(tc.dstIp, tc.dstPort, tc.payloadLength, tc.floodType)
@@ -49,8 +48,10 @@ func TestStartFlooding(t *testing.T) {
 
 			select {
 			case <-time.After(120 * time.Second):
+				cancel()
 				t.Log("overslept")
 			case <-ctx.Done():
+				cancel()
 				t.Logf("context closed, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
 			}
 		})
