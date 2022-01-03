@@ -54,7 +54,7 @@ jobs:
           go-version: 1.16.x
       - name: Test
         run: |
-          sudo echo "fs.file-max = 500000" >> /etc/sysctl.conf
+          sudo echo "fs.file-max = 500000" >> /etc/sysctl.conf.d/tmp.conf
           sudo sysctl -p
           sudo ulimit -n 500000
           make test
