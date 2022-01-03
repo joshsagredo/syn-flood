@@ -27,6 +27,9 @@ syn-flood can be customized with several command line arguments:
 --floodDurationSeconds  int64       Provide the duration of the attack in seconds, -1 for no limit, defaults to -1
 ```
 
+> To be able to run **syn-flood** with unlimited time range, you should also increase your operating system open file
+> limits, you can refer [here](https://www.tecmint.com/increase-set-open-file-limits-in-linux/) about how to do that.
+
 ## Download
 ### Binary
 Binary can be downloaded from [Releases](https://github.com/bilalcaliskan/syn-flood/releases) page.

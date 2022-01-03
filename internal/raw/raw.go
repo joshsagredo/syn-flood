@@ -25,9 +25,12 @@ func StartFlooding(destinationHost string, destinationPort, payloadLength int, f
 		err        error
 	)
 
-	destinationHost = resolveHost(destinationHost)
+	destinationHost, err = resolveHost(destinationHost)
+	if err != nil {
+		return err
+	}
 
-	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d\n",
+	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d",
 		destinationHost, destinationPort, floodType, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
 

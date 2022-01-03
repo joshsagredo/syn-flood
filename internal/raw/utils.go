@@ -82,17 +82,20 @@ func isIP(host string) bool {
 }
 
 // resolveHost function gets a string and returns the ip address while deciding it is an ip address already or DNS record
-func resolveHost(host string) string {
+func resolveHost(host string) (string, error) {
 	if !isIP(host) && isDNS(host) {
 		log.Printf("%s is a DNS record, making DNS lookup\n", host)
 		ipRecords, err := net.DefaultResolver.LookupIP(context.Background(), "ip4", host)
 		if err != nil {
-			log.Fatalf("an error occured on dns lookup: %s", err.Error())
+			log.Printf("an error occured on dns lookup: %s\n", err.Error())
+			return "", err
 		}
 
 		log.Printf("dns lookup succeeded, found %s for %s\n", ipRecords[0].String(), host)
 		host = ipRecords[0].String()
+	} else {
+		log.Printf("%s is already an IP address, skipping DNS resolution\n", host)
 	}
 
-	return host
+	return host, nil
 }

@@ -12,14 +12,20 @@ func TestResolveHost(t *testing.T) {
 	}{
 		{"case1", "example.com"},
 		{"case2", "93.184.216.34"},
+		{"case3", "nonexisteddns.com"},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.caseName, func(t *testing.T) {
-			res := resolveHost(tc.host)
-			assert.NotNil(t, res)
+			_, err := resolveHost(tc.host)
+			assert.NotNil(t, err)
 		})
 	}
+}
+
+func TestResolvHostFailure(t *testing.T) {
+	_, err := resolveHost("nonexisteddns.com")
+	assert.NotNil(t, err)
 }
 
 func TestIsDNS(t *testing.T) {
