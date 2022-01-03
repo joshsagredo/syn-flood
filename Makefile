@@ -17,7 +17,6 @@ test:
 	sudo sysctl -p
 	sudo go test ./... -v
 
-
 build:
 	go build -o bin/main main.go
 
