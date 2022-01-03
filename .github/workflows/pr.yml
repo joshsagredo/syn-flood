@@ -54,9 +54,9 @@ jobs:
           go-version: 1.16.x
       - name: Test
         run: |
-          sudo sysctl -w fs.file-max=100000000
+          sudo sysctl -w fs.file-max=1000000
           sudo sysctl -p
-          sudo sh -c "ulimit -n 500000"
+          sudo sh -c "ulimit -n 1000000"
           sudo go test ./... -v
 
 #  codeql:
