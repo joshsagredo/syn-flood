@@ -27,7 +27,7 @@ func StartFlooding(destinationHost string, destinationPort, payloadLength int, f
 
 	destinationHost = resolveHost(destinationHost)
 
-	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d",
+	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d\n",
 		destinationHost, destinationPort, floodType, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
 

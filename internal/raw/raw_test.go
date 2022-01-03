@@ -3,14 +3,11 @@ package raw
 import (
 	"context"
 	"math/rand"
-	"runtime"
-	"runtime/debug"
 	"testing"
 	"time"
 )
 
 func TestStartFlooding(t *testing.T) {
-	debug.SetGCPercent(-1)
 	srcIps := getIps()
 	srcPorts := getPorts()
 	macAddrs := getMacAddrs()
@@ -49,16 +46,14 @@ func TestStartFlooding(t *testing.T) {
 					return
 				}
 				t.Logf("ending flood, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
+				cancel()
 			}()
 
 			select {
 			case <-ctx.Done():
-				cancel()
 				t.Logf("context closed, caseName=%s, floodType=%s, floodMilliSeconds=%d\n", tc.name, tc.floodType, tc.floodMilliSeconds)
-				runtime.GC()
 			case <-time.After(120 * time.Second):
 				t.Log("overslept")
-				runtime.GC()
 			}
 		})
 	}
