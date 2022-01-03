@@ -18,17 +18,17 @@ func TestStartFlooding(t *testing.T) {
 		srcIp, dstIp                    string
 		srcMacAddr, dstMacAddr          []byte
 	}{
-		{"100byte_syn", "syn", 10, srcPorts[rand.Intn(len(srcPorts))],
-			443, 10, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
+		{"5byte_syn", "syn", 5, srcPorts[rand.Intn(len(srcPorts))],
+			443, 100, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
 		{
-			"100byte_ack", "ack", 10, srcPorts[rand.Intn(len(srcPorts))],
-			443, 10, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
+			"5byte_ack", "ack", 5, srcPorts[rand.Intn(len(srcPorts))],
+			443, 100, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
 		},
 		{
-			"100byte_synack", "synAck", 10, srcPorts[rand.Intn(len(srcPorts))],
-			443, 10, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
+			"5byte_synack", "synAck", 5, srcPorts[rand.Intn(len(srcPorts))],
+			443, 100, srcIps[rand.Intn(len(srcIps))], "213.238.175.187",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
 		},
 	}
