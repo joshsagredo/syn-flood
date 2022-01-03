@@ -54,8 +54,8 @@ jobs:
           go-version: 1.16.x
       - name: Test
         run: |
-          sh -c "ulimit -Sn 1048576"
-          sh -c "ulimit -Hn 1048576"
+          ulimit -Sn 1048576
+          ulimit -Hn 1048576
           make test
 
 #  codeql:
