@@ -55,7 +55,9 @@ jobs:
       - name: Test
         run: |
           ulimit -Sn 10485
+          ulimit -Sn
           ulimit -Hn 10485
+          ulimit -Hn
           make test
 
 #  codeql:
