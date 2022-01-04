@@ -1,17 +1,16 @@
 package cmd
 
 import (
-	"context"
+	"fmt"
 	"github.com/bilalcaliskan/syn-flood/internal/options"
 	"github.com/bilalcaliskan/syn-flood/internal/raw"
 	"github.com/dimiro1/banner"
+	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 	"time"
-
-	"github.com/spf13/cobra"
 )
 
 // init function initializes the cmd module
@@ -41,27 +40,31 @@ Please do not use that tool with devil needs.
 `,
 		Run: func(cmd *cobra.Command, args []string) {
 			opts := options.GetSynFloodOptions()
+			shouldStop := make(chan bool)
 			go func() {
-				if err = raw.StartFlooding(opts.Host, opts.Port, opts.PayloadLength, opts.FloodType); err != nil {
+				if err = raw.StartFlooding(shouldStop, opts.Host, opts.Port, opts.PayloadLength, opts.FloodType); err != nil {
 					log.Fatalf("an error occured on flooding process: %s", err.Error())
 				}
 			}()
 
 			if opts.FloodDurationSeconds != -1 {
-				ctx, cancel = context.WithDeadline(ctx, time.Now().Add(time.Duration(opts.FloodDurationSeconds)*time.Second))
-				defer cancel()
+				<-time.After(time.Duration(opts.FloodDurationSeconds) * time.Second)
+				shouldStop <- true
+				close(shouldStop)
 			}
 
 			for {
-				<-ctx.Done()
-				log.Printf("\n\nexecution completed with specified duration seconds %d\n", opts.FloodDurationSeconds)
-				os.Exit(0)
+				select {
+				case <-shouldStop:
+					fmt.Printf("\nshouldStop channel received a signal, stopping\n")
+					return
+				default:
+					continue
+				}
 			}
 		},
 	}
-	err    error
-	ctx    = context.Background()
-	cancel context.CancelFunc
+	err error
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
