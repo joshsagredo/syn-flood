@@ -47,11 +47,13 @@ Please do not use that tool with devil needs.
 				}
 			}()
 
-			if opts.FloodDurationSeconds != -1 {
-				<-time.After(time.Duration(opts.FloodDurationSeconds) * time.Second)
-				shouldStop <- true
-				close(shouldStop)
-			}
+			go func() {
+				if opts.FloodDurationSeconds != -1 {
+					<-time.After(time.Duration(opts.FloodDurationSeconds) * time.Second)
+					shouldStop <- true
+					close(shouldStop)
+				}
+			}()
 
 			for {
 				select {
