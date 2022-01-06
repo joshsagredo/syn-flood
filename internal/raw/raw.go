@@ -17,7 +17,7 @@ func init() {
 }
 
 // StartFlooding does the heavy lifting, starts the flood
-func StartFlooding(shouldStop chan bool, destinationHost string, destinationPort, payloadLength int, floodType string) error {
+func StartFlooding(stopChan chan struct{}, destinationHost string, destinationPort, payloadLength int, floodType string) error {
 	var (
 		ipHeader   *ipv4.Header
 		packetConn net.PacketConn
@@ -41,7 +41,7 @@ func StartFlooding(shouldStop chan bool, destinationHost string, destinationPort
 
 	for {
 		select {
-		case <-shouldStop:
+		case <-stopChan:
 			return nil
 		default:
 			tcpPacket := buildTcpPacket(srcPorts[rand.Intn(len(srcPorts))], destinationPort, floodType)

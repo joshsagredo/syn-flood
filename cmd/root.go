@@ -40,18 +40,20 @@ Please do not use that tool with devil needs.
 `,
 		Run: func(cmd *cobra.Command, args []string) {
 			opts := options.GetSynFloodOptions()
-			shouldStop := make(chan bool)
+			shouldStop := make(chan struct{})
 			go func() {
 				if err = raw.StartFlooding(shouldStop, opts.Host, opts.Port, opts.PayloadLength, opts.FloodType); err != nil {
 					log.Fatalf("an error occured on flooding process: %s", err.Error())
 				}
 			}()
 
-			if opts.FloodDurationSeconds != -1 {
-				<-time.After(time.Duration(opts.FloodDurationSeconds) * time.Second)
-				shouldStop <- true
-				close(shouldStop)
-			}
+			go func() {
+				if opts.FloodDurationSeconds != -1 {
+					<-time.After(time.Duration(opts.FloodDurationSeconds) * time.Second)
+					shouldStop <- struct{}{}
+					close(shouldStop)
+				}
+			}()
 
 			for {
 				select {
