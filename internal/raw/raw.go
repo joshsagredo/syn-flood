@@ -17,7 +17,7 @@ func init() {
 }
 
 // StartFlooding does the heavy lifting, starts the flood
-func StartFlooding(stopChan chan bool, destinationHost string, destinationPort, payloadLength int, floodType string) error {
+func StartFlooding(stopChan chan struct{}, destinationHost string, destinationPort, payloadLength int, floodType string) error {
 	var (
 		ipHeader   *ipv4.Header
 		packetConn net.PacketConn

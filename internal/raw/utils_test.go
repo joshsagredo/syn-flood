@@ -10,7 +10,7 @@ func TestResolveHostSuccess(t *testing.T) {
 		caseName string
 		host     string
 	}{
-		{"case1", "example.com"},
+		{"case1", "93.184.216.34"},
 		{"case2", "93.184.216.34"},
 	}
 
@@ -23,7 +23,7 @@ func TestResolveHostSuccess(t *testing.T) {
 }
 
 func TestResolvHostFailure(t *testing.T) {
-	_, err := resolveHost("nonexisteddns.com")
+	_, err := resolveHost("foo.bar.com")
 	assert.NotNil(t, err)
 }
 
