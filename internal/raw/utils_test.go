@@ -10,7 +10,7 @@ func TestResolveHostSuccess(t *testing.T) {
 		caseName string
 		host     string
 	}{
-		{"case1", "93.184.216.34"},
+		{"case1", "example.com"},
 		{"case2", "93.184.216.34"},
 	}
 
