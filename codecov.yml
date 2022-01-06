@@ -1,0 +1,6 @@
+---
+
+ignore:
+  - cmd/**/*
+  - main.go
+  - internal/raw/constants.go
