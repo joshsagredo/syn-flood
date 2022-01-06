@@ -40,7 +40,7 @@ Please do not use that tool with devil needs.
 `,
 		Run: func(cmd *cobra.Command, args []string) {
 			opts := options.GetSynFloodOptions()
-			shouldStop := make(chan struct{})
+			shouldStop := make(chan bool)
 			go func() {
 				if err = raw.StartFlooding(shouldStop, opts.Host, opts.Port, opts.PayloadLength, opts.FloodType); err != nil {
 					log.Fatalf("an error occured on flooding process: %s", err.Error())
@@ -50,7 +50,7 @@ Please do not use that tool with devil needs.
 			go func() {
 				if opts.FloodDurationSeconds != -1 {
 					<-time.After(time.Duration(opts.FloodDurationSeconds) * time.Second)
-					shouldStop <- struct{}{}
+					shouldStop <- true
 					close(shouldStop)
 				}
 			}()
