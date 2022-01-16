@@ -110,11 +110,11 @@ func buildIpPacket(srcIpStr, dstIpStr string) *layers.IPv4 {
 func buildTcpPacket(srcPort, dstPort int, floodType string) *layers.TCP {
 	var isSyn, isAck bool
 	switch floodType {
-	case "syn":
+	case TypeSyn:
 		isSyn = true
-	case "ack":
+	case TypeAck:
 		isAck = true
-	case "synAck":
+	case TypeSynAck:
 		isSyn = true
 		isAck = true
 	}

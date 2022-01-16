@@ -23,7 +23,7 @@ func init() {
 		"Provide reachable port of the target")
 	rootCmd.PersistentFlags().IntVarP(&opts.PayloadLength, "payloadLength", "",
 		1400, "Provide payload length in bytes for each SYN packet")
-	rootCmd.PersistentFlags().StringVarP(&opts.FloodType, "floodType", "", "syn",
+	rootCmd.PersistentFlags().StringVarP(&opts.FloodType, "floodType", "", raw.TypeSyn,
 		"Provide the attack type. Proper values are: syn, ack, synack")
 	rootCmd.PersistentFlags().Int64VarP(&opts.FloodDurationSeconds, "floodDurationSeconds",
 		"", -1, "Provide the duration of the attack in seconds, -1 for no limit, defaults to -1")
