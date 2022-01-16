@@ -1,10 +1,18 @@
 package raw
 
 import (
+	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
 	"time"
 )
+
+func TestStartFloodingFailure(t *testing.T) {
+	stopChan := make(chan bool)
+	t.Log("starting flood, caseName=case_fail, floodType=syn, floodMilliSeconds=50")
+	err := StartFlooding(stopChan, "foo.example.com", 443, 10, "syn")
+	assert.NotNil(t, err)
+}
 
 func TestStartFlooding(t *testing.T) {
 	srcIps := getIps()
@@ -17,16 +25,16 @@ func TestStartFlooding(t *testing.T) {
 		srcIp, dstIp                    string
 		srcMacAddr, dstMacAddr          []byte
 	}{
-		{"100byte_syn", "syn", 10, srcPorts[rand.Intn(len(srcPorts))],
+		{"100byte_syn", TypeSyn, 10, srcPorts[rand.Intn(len(srcPorts))],
 			443, 50, srcIps[rand.Intn(len(srcIps))], "93.184.216.34",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))]},
 		{
-			"100byte_ack", "ack", 10, srcPorts[rand.Intn(len(srcPorts))],
+			"100byte_ack", TypeAck, 10, srcPorts[rand.Intn(len(srcPorts))],
 			443, 50, srcIps[rand.Intn(len(srcIps))], "93.184.216.34",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
 		},
 		{
-			"100byte_synack", "synAck", 10, srcPorts[rand.Intn(len(srcPorts))],
+			"100byte_synack", TypeSynAck, 10, srcPorts[rand.Intn(len(srcPorts))],
 			443, 50, srcIps[rand.Intn(len(srcIps))], "93.184.216.34",
 			macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))],
 		},
