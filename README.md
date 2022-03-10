@@ -15,7 +15,10 @@
 This project is developed with the objective of learning low level network operations with Golang. It starts a syn flood attack
 with raw sockets.
 
-> **Please do not use that tool with devil needs.**
+## Legal Disclaimer
+This tool is created for the sole purpose of security awareness and education, it should not be used against systems 
+that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you 
+may cause. You agree that you use this software at your own risk.
 
 ## Prerequisites
 You need root access to run syn-flood
