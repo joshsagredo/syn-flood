@@ -16,8 +16,8 @@ This project is developed with the objective of learning low level network opera
 with raw sockets.
 
 ## Legal Disclaimer
-This tool is created for the sole purpose of security awareness and education, it should not be used against systems 
-that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you 
+This tool is created for the sole purpose of security awareness and education, it should not be used against systems
+that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you
 may cause. You agree that you use this software at your own risk.
 
 ## Prerequisites
@@ -48,6 +48,13 @@ $ sudo ./syn-flood --host 10.0.0.100 --port 443
 Or with DNS:
 ```shell
 $ sudo ./syn-flood --host foo.example.com --port 443
+```
+
+### Homebrew
+This project can be installed with [Homebrew](https://brew.sh/):
+```shell
+$ brew tap bilalcaliskan/tap
+$ brew install bilalcaliskan/tap/syn-flood
 ```
 
 ### Docker
