@@ -3,11 +3,12 @@ env:
   - CGO_ENABLED=0
   - GOFLAGS=-mod=vendor
   - GO111MODULE=auto
-
 before:
   hooks:
     - go mod vendor
-
+archives:
+  - replacements:
+      amd64: x86_64
 builds:
   - id: binary
     goos:
@@ -18,3 +19,17 @@ builds:
     ldflags:
       - -s -w
     main: ./main.go
+brews:
+  - name: syn-flood
+    tap:
+      # The token determines the release type (Github/Gitlab).
+      owner: bilalcaliskan
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    # Brew fails from multiple 32-bit arm versions.
+    # Specify which version should be used.
+    goarm: 6
+    homepage: https://github.com/bilalcaliskan/syn-flood
+    license: apache-2.0
+    description: syn-flood starts a syn flood attack with raw sockets. created for learning low level network ops
