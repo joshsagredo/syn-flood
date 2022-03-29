@@ -23,6 +23,16 @@ may cause. You agree that you use this software at your own risk.
 ## Prerequisites
 You need root access to run syn-flood
 
+syn-flood needs lots of open file descriptors while running so we need to increase it first. You can increase it like below 
+temporarily. That works for both Macos and Linux: 
+
+```shell
+$ sudo ulimit -S -n 2048000
+$ sudo syn-flood --host foo.example.com --port 443 --floodType syn
+```
+
+If you still get **"too many open files"** error, try increasing the value that passed to first command.
+
 ## Configuration
 syn-flood can be customized with several command line arguments:
 ```
@@ -55,6 +65,7 @@ This project can be installed with [Homebrew](https://brew.sh/):
 ```shell
 $ brew tap bilalcaliskan/tap
 $ brew install bilalcaliskan/tap/syn-flood
+$ sudo syn-flood --host foo.example.com --port 443 --floodType syn
 ```
 
 ### Docker
