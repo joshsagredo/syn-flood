@@ -1,0 +1,6 @@
+FROM alpine:latest
+
+ADD syn-flood /usr/local/bin/syn-flood
+
+USER root
+ENTRYPOINT ["syn-flood"]

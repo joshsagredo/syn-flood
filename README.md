@@ -23,8 +23,8 @@ may cause. You agree that you use this software at your own risk.
 ## Prerequisites
 You need root access to run syn-flood
 
-syn-flood needs lots of open file descriptors while running so we need to increase it first. You can increase it like below 
-temporarily. That works for both Macos and Linux: 
+syn-flood needs lots of open file descriptors while running so we need to increase it first. You can increase it like below
+temporarily. That works for both Macos and Linux:
 
 ```shell
 $ sudo ulimit -S -n 2048000
@@ -79,6 +79,12 @@ This project requires below tools while developing:
 - [Golang 1.17](https://golang.org/doc/go1.17)
 - [pre-commit](https://pre-commit.com/)
 - [golangci-lint](https://golangci-lint.run/usage/install/) - required by [pre-commit](https://pre-commit.com/)
+- [gocyclo](https://github.com/fzipp/gocyclo) - required by [pre-commit](https://pre-commit.com/)
+
+After you installed [pre-commit](https://pre-commit.com/), simply run below command to prepare your development environment:
+```shell
+$ pre-commit install
+```
 
 ## References
 - https://www.devdungeon.com/content/packet-capture-injection-and-analysis-gopacket
