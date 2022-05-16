@@ -15,6 +15,9 @@ ineffassign:
 test:
 	sudo go test ./... -race -v
 
+coverage:
+	sudo go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+
 build:
 	go build -o bin/main main.go
 

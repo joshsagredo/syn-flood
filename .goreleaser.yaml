@@ -1,14 +1,19 @@
+---
 project_name: syn-flood
+
 env:
   - CGO_ENABLED=0
-  - GOFLAGS=-mod=vendor
   - GO111MODULE=auto
+
 before:
   hooks:
-    - go mod vendor
+    - go mod tidy
+    - go mod download
+
 archives:
   - replacements:
       amd64: x86_64
+
 builds:
   - id: binary
     goos:
@@ -16,9 +21,31 @@ builds:
       - darwin
     goarch:
       - amd64
+    binary: syn-flood
     ldflags:
-      - -s -w
+      - -s -w -X github.com/bilalcaliskan/syn-flood/cmd.GitVersion={{ .Version }} -X github.com/bilalcaliskan/syn-flood/cmd.gitCommit={{ .ShortCommit }}  -X github.com/bilalcaliskan/syn-flood/cmd.buildDate={{ .CommitDate }}
     main: ./main.go
+
+dockers:
+  - image_templates:
+      - "docker.io/bilalcaliskan/{{ .ProjectName }}:{{ .Version }}"
+      - "docker.io/bilalcaliskan/{{ .ProjectName }}:latest"
+    dockerfile: Dockerfile.goreleaser
+    goos: linux
+    goarch: amd64
+    use: docker
+    build_flag_templates:
+      - --pull
+      - --platform=linux/amd64
+      - --label=org.opencontainers.image.title={{ .ProjectName }}
+      - --label=org.opencontainers.image.description={{ .ProjectName }}
+      - --label=org.opencontainers.image.url=https://github.com/bilalcaliskan/syn-flood
+      - --label=org.opencontainers.image.source=https://github.com/bilalcaliskan/syn-flood
+      - --label=org.opencontainers.image.version={{ .Version }}
+      - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+      - --label=org.opencontainers.image.licenses=Apache
+
 brews:
   - name: syn-flood
     tap:
@@ -33,3 +60,20 @@ brews:
     homepage: https://github.com/bilalcaliskan/syn-flood
     license: apache-2.0
     description: syn-flood starts a syn flood attack with raw sockets. created for learning low level network ops
+
+release:
+  github:
+    owner: bilalcaliskan
+    name: syn-flood
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^build:'
+      - 'README'
+      - '^Merge branch'
+      - '^Merge pull request'
