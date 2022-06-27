@@ -7,7 +7,7 @@ require (
 	github.com/google/gopacket v1.1.19
 	github.com/schollz/progressbar/v3 v3.8.6
 	github.com/spf13/cobra v1.5.0
-	github.com/stretchr/testify v1.7.3
+	github.com/stretchr/testify v1.7.5
 	go.uber.org/automaxprocs v1.5.1
 	golang.org/x/net v0.0.0-20220513224357-95641704303c
 )
