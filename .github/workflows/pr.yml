@@ -12,7 +12,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.19.x
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
@@ -27,7 +27,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.19.x
       - name: Vet
         run: make vet
 
@@ -39,7 +39,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.19.x
       - name: Run Ineffassign
         run: make ineffassign
 
@@ -55,7 +55,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.19.x
       - name: Test
         run: make test
 
@@ -86,7 +86,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.19.x
       - name: Coverage Test
         run: make coverage
       - name: SonarCloud Scan
@@ -109,7 +109,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version: 1.19.x
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Test
