@@ -13,6 +13,10 @@ before:
 archives:
   - replacements:
       amd64: x86_64
+    files:
+      - build/ci/banner.txt
+      - README.md
+      - LICENSE
 
 builds:
   - id: binary
@@ -23,7 +27,7 @@ builds:
       - amd64
     binary: syn-flood
     ldflags:
-      - -s -w -X github.com/bilalcaliskan/syn-flood/cmd.GitVersion={{ .Version }} -X github.com/bilalcaliskan/syn-flood/cmd.gitCommit={{ .ShortCommit }}  -X github.com/bilalcaliskan/syn-flood/cmd.buildDate={{ .CommitDate }}
+      - -s -w -X github.com/bilalcaliskan/syn-flood/internal/version.gitVersion={{ .Version }} -X github.com/bilalcaliskan/syn-flood/internal/version.gitCommit={{ .ShortCommit }}  -X github.com/bilalcaliskan/syn-flood/internal/version.buildDate={{ .CommitDate }}
     main: ./main.go
 
 dockers:
@@ -34,6 +38,8 @@ dockers:
     goos: linux
     goarch: amd64
     use: docker
+    extra_files:
+      - build/ci/banner.txt
     build_flag_templates:
       - --pull
       - --platform=linux/amd64
@@ -49,13 +55,10 @@ dockers:
 brews:
   - name: syn-flood
     tap:
-      # The token determines the release type (Github/Gitlab).
       owner: bilalcaliskan
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
     folder: Formula
-    # Brew fails from multiple 32-bit arm versions.
-    # Specify which version should be used.
     goarm: 6
     homepage: https://github.com/bilalcaliskan/syn-flood
     license: apache-2.0
@@ -74,6 +77,7 @@ changelog:
       - '^test:'
       - '^ci:'
       - '^build:'
+      - '^style:'
       - 'README'
       - '^Merge branch'
       - '^Merge pull request'

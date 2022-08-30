@@ -14,13 +14,12 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.19.x
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          # version: latest
-          version: v1.46.1
+      - name: Lint code
+        run: make -s lint
+      - name: Clean downloaded binaries
+        run: make -s clean
 
-  vet:
+  fmt:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,20 +28,10 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.19.x
-      - name: Vet
-        run: make vet
-
-  ineffassign:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.19.x
-      - name: Run Ineffassign
-        run: make ineffassign
+      - name: Run fmt
+        run: make -s fmt
+      - name: Clean downloaded binaries
+        run: make -s clean
 
   test:
 #    strategy:
@@ -58,14 +47,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Test
-        run: make test
+        run: make -s test
 
   codeql:
     runs-on: ubuntu-latest
     needs:
       - lint
-      - vet
-      - ineffassign
+      - fmt
       - test
     strategy:
       fail-fast: false
@@ -87,8 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - lint
-      - vet
-      - ineffassign
+      - fmt
       - test
     steps:
       - uses: actions/checkout@v3
@@ -105,6 +92,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dproject.settings=build/ci/sonar-project.properties
       - name: SonarQube Quality Gate check
         uses: sonarsource/sonarqube-quality-gate-action@master
         timeout-minutes: 5
@@ -114,8 +104,7 @@ jobs:
   build:
     needs:
       - lint
-      - vet
-      - ineffassign
+      - fmt
       - test
     strategy:
       matrix:
@@ -129,7 +118,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Test
-        run: make build
+        run: make -s build
 
   tag:
     runs-on: ubuntu-latest
@@ -180,7 +169,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --rm-dist
+          args: release --rm-dist --config build/package/.goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}

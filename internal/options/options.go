@@ -19,4 +19,8 @@ type SynFloodOptions struct {
 	FloodType string
 	// FloodDurationSeconds is the duration of the attack with seconds. Defaults to -1 which means
 	FloodDurationSeconds int64
+	// BannerFilePath is the relative path to the banner file
+	BannerFilePath string
+	// VerboseLog is the verbosity of the logging library
+	VerboseLog bool
 }
