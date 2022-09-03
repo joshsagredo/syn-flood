@@ -62,7 +62,11 @@ upgrade-direct-deps: tidy
 
 .PHONY: tidy
 tidy:
-	go env
+	export GOCACHE="/home/runner/.cache/go-build"
+	export GOMODCACHE="/home/runner/go/pkg/mod"
+	export GOPATH="/home/runner/go"
+	export GOTOOLDIR="/opt/hostedtoolcache/go/1.19.0/x64/pkg/tool/linux_amd64"
+	export GOVERSION="go1.19"
 	go mod tidy
 	go mod vendor
 
