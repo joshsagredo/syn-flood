@@ -62,7 +62,7 @@ upgrade-direct-deps: tidy
 
 .PHONY: tidy
 tidy:
-	echo $GOPATH
+	export GOPATH="/home/runner/go"
 	go mod tidy
 	go mod vendor
 
