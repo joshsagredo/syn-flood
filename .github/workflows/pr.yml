@@ -46,7 +46,7 @@ jobs:
         with:
           go-version-file: "go.mod"
       - name: Test
-        run: make -s test
+        run: sudo make -s test
 
   codeql:
     runs-on: ubuntu-latest
@@ -77,7 +77,7 @@ jobs:
         with:
           go-version-file: "go.mod"
       - name: Coverage Test
-        run: make -s test-with-coverage
+        run: sudo make -s test-with-coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
