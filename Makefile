@@ -62,7 +62,7 @@ upgrade-direct-deps: tidy
 
 .PHONY: tidy
 tidy:
-	export GOPATH="/home/runner/go"
+	go env
 	go mod tidy
 	go mod vendor
 
