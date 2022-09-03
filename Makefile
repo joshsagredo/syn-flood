@@ -63,6 +63,7 @@ upgrade-direct-deps: tidy
 .PHONY: tidy
 tidy:
 	go mod tidy
+	go mod vendor
 
 .PHONY: run-goimports
 run-goimports: go-imports-install
