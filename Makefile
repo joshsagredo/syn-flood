@@ -62,7 +62,7 @@ upgrade-direct-deps: tidy
 
 .PHONY: tidy
 tidy:
-	go version
+	echo $GOPATH
 	go mod tidy
 	go mod vendor
 
