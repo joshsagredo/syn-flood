@@ -12,7 +12,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19.x
+          go-version-file: "go.mod"
       - name: Lint code
         run: make -s lint
       - name: Clean downloaded binaries
@@ -26,7 +26,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19.x
+          go-version-file: "go.mod"
       - name: Run fmt
         run: make -s fmt
       - name: Clean downloaded binaries
@@ -44,7 +44,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19.x
+          go-version-file: "go.mod"
       - name: Test
         run: make -s test
 
@@ -75,7 +75,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19.x
+          go-version-file: "go.mod"
       - name: Coverage Test
         run: make -s test-with-coverage
       - name: SonarCloud Scan
@@ -101,7 +101,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19.x
+          go-version-file: "go.mod"
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Test
