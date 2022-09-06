@@ -62,11 +62,6 @@ upgrade-direct-deps: tidy
 
 .PHONY: tidy
 tidy:
-	export GOCACHE="/home/runner/.cache/go-build"
-	export GOMODCACHE="/home/runner/go/pkg/mod"
-	export GOPATH="/home/runner/go"
-	export GOTOOLDIR="/opt/hostedtoolcache/go/1.19.0/x64/pkg/tool/linux_amd64"
-	export GOVERSION="go1.19"
 	go mod tidy
 	go mod vendor
 
@@ -110,12 +105,12 @@ run-vet:
 .PHONY: test
 test: tidy
 	$(info starting the test for whole module...)
-	sudo -E go test -failfast -vet=off -race ./... || (echo an error while testing, exiting!; sh -c 'exit 1';)
+	go test -failfast -vet=off -race -exec sudo ./... || (echo an error while testing, exiting!; sh -c 'exit 1';)
 
 .PHONY: test-with-coverage
 test-with-coverage: tidy
 	$(info starting the test for whole module...)
-	sudo -E go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+	go test -race -exec sudo ./... -coverprofile=coverage.txt -covermode=atomic
 
 .PHONY: update
 update: tidy
