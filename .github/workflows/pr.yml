@@ -12,14 +12,13 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          # version: latest
-          version: v1.46.1
+          go-version-file: "go.mod"
+      - name: Lint code
+        run: make -s lint
+      - name: Clean downloaded binaries
+        run: make -s clean
 
-  vet:
+  fmt:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,21 +26,11 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
-      - name: Vet
-        run: make vet
-
-  ineffassign:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.17.x
-      - name: Run Ineffassign
-        run: make ineffassign
+          go-version-file: "go.mod"
+      - name: Run fmt
+        run: make -s fmt
+      - name: Clean downloaded binaries
+        run: make -s clean
 
   test:
 #    strategy:
@@ -55,9 +44,9 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version-file: "go.mod"
       - name: Test
-        run: make test
+        run: make -s test
 
   codeql:
     runs-on: ubuntu-latest
@@ -86,14 +75,17 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
+          go-version-file: "go.mod"
       - name: Coverage Test
-        run: make coverage
+        run: make -s test-with-coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dproject.settings=build/ci/sonar-project.properties
       - name: SonarQube Quality Gate check
         uses: sonarsource/sonarqube-quality-gate-action@master
         timeout-minutes: 5
@@ -106,11 +98,11 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
-      - name: Checkout code
-        uses: actions/checkout@v3
+          go-version-file: "go.mod"
       - name: Test
-        run: make build
+        run: make -s build

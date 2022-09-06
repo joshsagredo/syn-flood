@@ -3,7 +3,8 @@ package raw
 import (
 	"context"
 	"fmt"
-	"log"
+	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	"math/rand"
 	"net"
 	"regexp"
@@ -44,7 +45,6 @@ func getMacAddrs() [][]byte {
 		buf := make([]byte, 6)
 		_, err := rand.Read(buf)
 		if err != nil {
-			fmt.Println("error:", err)
 			continue
 		}
 		macAddrs = append(macAddrs, buf)
@@ -61,7 +61,8 @@ func isDNS(host string) bool {
 	)
 
 	if res, err = regexp.MatchString(DnsRegex, host); err != nil {
-		log.Fatalf("a fatal error occured while matching provided --host with DNS regex: %s", err.Error())
+		logger.Fatal("fatal error occurred while matching provided --host flag with DNS regex", zap.String("host", host),
+			zap.String("regex", DnsRegex), zap.String("error", err.Error()))
 	}
 
 	return res
@@ -75,7 +76,8 @@ func isIP(host string) bool {
 	)
 
 	if res, err = regexp.MatchString(IpRegex, host); err != nil {
-		log.Fatalf("a fatal error occured while matching provided --host with IP regex: %s", err.Error())
+		logger.Fatal("fatal error occurred while matching provided --host flag with IP regex", zap.String("host", host),
+			zap.String("regex", IpRegex), zap.String("error", err.Error()))
 	}
 
 	return res
@@ -84,17 +86,16 @@ func isIP(host string) bool {
 // resolveHost function gets a string and returns the ip address while deciding it is an ip address already or DNS record
 func resolveHost(host string) (string, error) {
 	if !isIP(host) && isDNS(host) {
-		log.Printf("%s is a DNS record, making DNS lookup\n", host)
+		logger.Debug("already a DNS record provided, making DNS lookup", zap.String("host", host))
 		ipRecords, err := net.DefaultResolver.LookupIP(context.Background(), "ip4", host)
 		if err != nil {
-			log.Printf("an error occured on dns lookup: %s\n", err.Error())
-			return "", err
+			return "", errors.Wrapf(err, "an error occured on DNS lookup for %s", host)
 		}
 
-		log.Printf("dns lookup succeeded, found %s for %s\n", ipRecords[0].String(), host)
+		logger.Debug("DNS lookup succeeded", zap.String("DNS", host), zap.String("IP", ipRecords[0].String()))
 		host = ipRecords[0].String()
 	} else {
-		log.Printf("%s is already an IP address, skipping DNS resolution\n", host)
+		logger.Debug("already an IP address, skipping DNS resolution", zap.String("host", host))
 	}
 
 	return host, nil

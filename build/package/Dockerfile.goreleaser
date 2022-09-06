@@ -1,0 +1,7 @@
+FROM alpine:latest
+
+ADD syn-flood /usr/local/bin/syn-flood
+ADD build/ci/banner.txt /usr/local/banner.txt
+
+USER root
+ENTRYPOINT ["syn-flood", "--bannerFilePath", "/usr/local/banner.txt"]

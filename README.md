@@ -36,11 +36,15 @@ If you still get **"too many open files"** error, try increasing the value that 
 ## Configuration
 syn-flood can be customized with several command line arguments:
 ```
---host                  string      Provide public ip or DNS of the target
---port                  int         Provide reachable port of the target
---payloadLength         int         Provide payload length in bytes for each packet
---floodType             string      Provide the attack type. Proper values are: syn, ack, synack
---floodDurationSeconds  int64       Provide the duration of the attack in seconds, -1 for no limit, defaults to -1
+Flags:
+      --floodDurationSeconds int   Provide the duration of the attack in seconds, -1 for no limit, defaults to -1 (default -1)
+      --floodType string           Provide the attack type. Proper values are: syn, ack, synack (default "syn")
+  -h, --help                       help for syn-flood
+      --host string                Provide public ip or DNS of the target (default "213.238.175.187")
+      --payloadLength int          Provide payload length in bytes for each SYN packet (default 1400)
+      --port int                   Provide reachable port of the target (default 443)
+  -v, --verbose                    verbose output of the logging library (default false)
+      --version                    version for syn-flood
 ```
 
 > To be able to run **syn-flood** with unlimited time range, you should also increase your operating system open file
@@ -76,14 +80,14 @@ $ docker run bilalcaliskan/syn-flood:latest
 
 ## Development
 This project requires below tools while developing:
-- [Golang 1.17](https://golang.org/doc/go1.17)
+- [Golang 1.19](https://golang.org/doc/go1.19)
 - [pre-commit](https://pre-commit.com/)
 - [golangci-lint](https://golangci-lint.run/usage/install/) - required by [pre-commit](https://pre-commit.com/)
 - [gocyclo](https://github.com/fzipp/gocyclo) - required by [pre-commit](https://pre-commit.com/)
 
 After you installed [pre-commit](https://pre-commit.com/), simply run below command to prepare your development environment:
 ```shell
-$ pre-commit install
+$ pre-commit install -c build/ci/.pre-commit-config.yaml
 ```
 
 ## References

@@ -2,16 +2,22 @@ package raw
 
 import (
 	"fmt"
+	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
+	"github.com/pkg/errors"
 	"github.com/schollz/progressbar/v3"
+	"go.uber.org/zap"
 	"golang.org/x/net/ipv4"
 	"math/rand"
 	"net"
 	"time"
 )
 
+var logger *zap.Logger
+
 func init() {
+	logger = logging.GetLogger()
 	// initialize global pseudo random generator
 	rand.Seed(time.Now().Unix())
 }
@@ -27,7 +33,7 @@ func StartFlooding(stopChan chan bool, destinationHost string, destinationPort, 
 
 	destinationHost, err = resolveHost(destinationHost)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "unable to resolve host")
 	}
 
 	description := fmt.Sprintf("Flood is in progress, target=%s:%d, floodType=%s, payloadLength=%d",
@@ -61,11 +67,11 @@ func StartFlooding(stopChan chan bool, destinationHost string, destinationPort, 
 			}
 
 			if err = ipPacket.SerializeTo(ipHeaderBuf, opts); err != nil {
-				return err
+				return errors.Wrap(err, "unable to serialize")
 			}
 
 			if ipHeader, err = ipv4.ParseHeader(ipHeaderBuf.Bytes()); err != nil {
-				return err
+				return errors.Wrap(err, "unable to parse IP header")
 			}
 
 			ethernetLayer := buildEthernetPacket(macAddrs[rand.Intn(len(macAddrs))], macAddrs[rand.Intn(len(macAddrs))])
@@ -73,16 +79,16 @@ func StartFlooding(stopChan chan bool, destinationHost string, destinationPort, 
 			pyl := gopacket.Payload(payload)
 
 			if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, pyl); err != nil {
-				return err
+				return errors.Wrap(err, "unable to serialize layers")
 			}
 
 			// XXX send packet
 			if packetConn, err = net.ListenPacket("ip4:tcp", "0.0.0.0"); err != nil {
-				return err
+				return errors.Wrap(err, "unable to listen packets on 0.0.0.0")
 			}
 
 			if rawConn, err = ipv4.NewRawConn(packetConn); err != nil {
-				return err
+				return errors.Wrap(err, "unable to create raw connection over 0.0.0.0")
 			}
 
 			if err = rawConn.WriteTo(ipHeader, tcpPayloadBuf.Bytes(), nil); err != nil {
@@ -90,7 +96,7 @@ func StartFlooding(stopChan chan bool, destinationHost string, destinationPort, 
 			}
 
 			if err = bar.Add(payloadLength); err != nil {
-				return err
+				return errors.Wrap(err, "unable to increase bar length")
 			}
 		}
 	}
