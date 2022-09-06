@@ -9,7 +9,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install Go
         uses: actions/setup-go@v3
         with:
@@ -40,12 +41,12 @@ jobs:
 #    runs-on: ${{ matrix.os }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install Go
         uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
-      - name: Checkout code
-        uses: actions/checkout@v3
       - name: Test
         run: make -s test
 
