@@ -110,12 +110,12 @@ run-vet:
 .PHONY: test
 test: tidy
 	$(info starting the test for whole module...)
-	go test -failfast -vet=off -race ./... || (echo an error while testing, exiting!; sh -c 'exit 1';)
+	sudo -E go test -failfast -vet=off -race ./... || (echo an error while testing, exiting!; sh -c 'exit 1';)
 
 .PHONY: test-with-coverage
 test-with-coverage: tidy
 	$(info starting the test for whole module...)
-	go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+	sudo -E go test ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 .PHONY: update
 update: tidy
