@@ -6,7 +6,7 @@ require (
 	github.com/dimiro1/banner v1.1.0
 	github.com/google/gopacket v1.1.19
 	github.com/pkg/errors v0.9.1
-	github.com/schollz/progressbar/v3 v3.10.1
+	github.com/schollz/progressbar/v3 v3.11.0
 	github.com/spf13/cobra v1.5.0
 	github.com/stretchr/testify v1.8.0
 	go.uber.org/automaxprocs v1.5.1
