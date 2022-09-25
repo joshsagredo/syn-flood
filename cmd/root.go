@@ -2,16 +2,18 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/bilalcaliskan/syn-flood/internal/logging"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/bilalcaliskan/syn-flood/internal/options"
+
+	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/bilalcaliskan/syn-flood/internal/raw"
 	"github.com/bilalcaliskan/syn-flood/internal/version"
 	"github.com/dimiro1/banner"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	"os"
-	"strings"
-	"time"
 )
 
 var (
@@ -58,6 +60,19 @@ Please do not use that tool with devil needs.
 				logging.Atomic.SetLevel(zap.DebugLevel)
 			}
 
+			if _, err := os.Stat(opts.BannerFilePath); err == nil {
+				bannerBytes, _ := os.ReadFile(opts.BannerFilePath)
+				banner.Init(os.Stdout, true, false, strings.NewReader(string(bannerBytes)))
+			}
+
+			logging.GetLogger().Info("syn-flood is started",
+				zap.String("appVersion", ver.GitVersion),
+				zap.String("goVersion", ver.GoVersion),
+				zap.String("goOS", ver.GoOs),
+				zap.String("goArch", ver.GoArch),
+				zap.String("gitCommit", ver.GitCommit),
+				zap.String("buildDate", ver.BuildDate))
+
 			shouldStop := make(chan bool)
 			go func() {
 				if err = raw.StartFlooding(shouldStop, opts.Host, opts.Port, opts.PayloadLength, opts.FloodType); err != nil {
@@ -92,9 +107,6 @@ Please do not use that tool with devil needs.
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	bannerBytes, _ := os.ReadFile("banner.txt")
-	banner.Init(os.Stdout, true, false, strings.NewReader(string(bannerBytes)))
-
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
