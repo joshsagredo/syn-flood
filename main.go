@@ -5,7 +5,6 @@ package main
 
 import (
 	"github.com/bilalcaliskan/syn-flood/cmd"
-	_ "go.uber.org/automaxprocs"
 )
 
 func main() {

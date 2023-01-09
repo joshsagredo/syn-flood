@@ -36,6 +36,9 @@ If you still get **"too many open files"** error, try increasing the value that 
 ## Configuration
 syn-flood can be customized with several command line arguments:
 ```
+Usage:
+  syn-flood [flags]
+
 Flags:
       --floodDurationSeconds int   Provide the duration of the attack in seconds, -1 for no limit, defaults to -1 (default -1)
       --floodType string           Provide the attack type. Proper values are: syn, ack, synack (default "syn")
