@@ -9,7 +9,6 @@ require (
 	github.com/schollz/progressbar/v3 v3.13.0
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
-	go.uber.org/automaxprocs v1.5.1
 	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.5.0
 )
@@ -18,7 +17,6 @@ require (
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
