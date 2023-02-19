@@ -27,7 +27,7 @@ func init() {
 	opts = options.GetSynFloodOptions()
 	// 213.238.175.187
 	rootCmd.PersistentFlags().StringVarP(&opts.Host, "host", "",
-		"213.238.175.187", "Provide public ip or DNS of the target")
+		"140.82.121.4", "Provide public ip or DNS of the target")
 	rootCmd.PersistentFlags().IntVarP(&opts.Port, "port", "", 443,
 		"Provide reachable port of the target")
 	rootCmd.PersistentFlags().IntVarP(&opts.PayloadLength, "payloadLength", "",
