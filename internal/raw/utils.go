@@ -2,27 +2,36 @@ package raw
 
 import (
 	"context"
+	"crypto/rand"
 	"fmt"
-	"github.com/pkg/errors"
-	"go.uber.org/zap"
-	"math/rand"
+	"math/big"
 	"net"
 	"regexp"
+
+	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 // getRandomPayload returns a byte slice to spoof ip packets with random payload in specified length
 func getRandomPayload(length int) []byte {
-	payload := make([]byte, length)
-	rand.Read(payload)
-	return payload
+	randomBytes := make([]byte, length)
+	if _, err := rand.Read(randomBytes); err != nil {
+		// TODO: handle that shit
+		panic(err)
+	}
+
+	return randomBytes
 }
 
 // getIps returns a string slice to spoof ip packets with dummy source ip addresses
 func getIps() []string {
 	ips := make([]string, 0)
 	for i := 0; i < 20; i++ {
-		ips = append(ips, fmt.Sprintf("%d.%d.%d.%d", rand.Intn(256), rand.Intn(256),
-			rand.Intn(256), rand.Intn(256)))
+		n1, _ := rand.Int(rand.Reader, big.NewInt(256))
+		n2, _ := rand.Int(rand.Reader, big.NewInt(256))
+		n3, _ := rand.Int(rand.Reader, big.NewInt(256))
+		n4, _ := rand.Int(rand.Reader, big.NewInt(256))
+		ips = append(ips, fmt.Sprintf("%d.%d.%d.%d", n1.Int64(), n2.Int64(), n3.Int64(), n4.Int64()))
 	}
 
 	return ips

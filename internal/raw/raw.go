@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
-	"time"
 
 	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/google/gopacket"
@@ -20,7 +19,6 @@ var logger *zap.Logger
 func init() {
 	logger = logging.GetLogger()
 	// initialize global pseudo random generator
-	rand.Seed(time.Now().Unix())
 }
 
 // StartFlooding does the heavy lifting, starts the flood
@@ -80,6 +78,7 @@ func StartFlooding(stopChan chan bool, destinationHost string, destinationPort, 
 			pyl := gopacket.Payload(payload)
 
 			if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket, pyl); err != nil {
+				//if err = gopacket.SerializeLayers(tcpPayloadBuf, opts, ethernetLayer, tcpPacket); err != nil {
 				return errors.Wrap(err, "unable to serialize layers")
 			}
 
