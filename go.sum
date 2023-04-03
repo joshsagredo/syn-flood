@@ -1,4 +1,6 @@
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
+github.com/bilalcaliskan/syn-flood v1.1.2 h1:T+GECnnePcJUn6YzrM+Vu9aLdVEz1RgtipVwUOb2kZc=
+github.com/bilalcaliskan/syn-flood v1.1.2/go.mod h1:DUGwx02VcVqZxT8n+BihW+6s4UcISBUoKpyfyjNUI4E=
 github.com/common-nighthawk/go-figure v0.0.0-20200609044655-c4b36f998cf2/go.mod h1:mk5IQ+Y0ZeO87b858TlA645sVcEcbiX6YqP98kt+7+w=
 github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be h1:J5BL2kskAlV9ckgEsNQXscjIaLiOYiZ75d4e94E6dcQ=
 github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be/go.mod h1:mk5IQ+Y0ZeO87b858TlA645sVcEcbiX6YqP98kt+7+w=

@@ -1,15 +1,15 @@
 # Syn Flood
 
-[![CI](https://github.com/bilalcaliskan/syn-flood/workflows/CI/badge.svg?event=push)](https://github.com/bilalcaliskan/syn-flood/actions?query=workflow%3ACI)
-[![Docker pulls](https://img.shields.io/docker/pulls/bilalcaliskan/syn-flood)](https://hub.docker.com/r/bilalcaliskan/syn-flood/)
-[![Go Report Card](https://goreportcard.com/badge/github.com/bilalcaliskan/syn-flood)](https://goreportcard.com/report/github.com/bilalcaliskan/syn-flood)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bilalcaliskan_syn-flood&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bilalcaliskan_syn-flood)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=bilalcaliskan_syn-flood&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=bilalcaliskan_syn-flood)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bilalcaliskan_syn-flood&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=bilalcaliskan_syn-flood)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=bilalcaliskan_syn-flood&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=bilalcaliskan_syn-flood)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bilalcaliskan_syn-flood&metric=coverage)](https://sonarcloud.io/summary/new_code?id=bilalcaliskan_syn-flood)
-[![Release](https://img.shields.io/github/release/bilalcaliskan/syn-flood.svg)](https://github.com/bilalcaliskan/syn-flood/releases/latest)
-[![Go version](https://img.shields.io/github/go-mod/go-version/bilalcaliskan/syn-flood)](https://github.com/bilalcaliskan/syn-flood)
+[![CI](https://github.com/joshsagredo/syn-flood/workflows/CI/badge.svg?event=push)](https://github.com/joshsagredo/syn-flood/actions?query=workflow%3ACI)
+[![Docker pulls](https://img.shields.io/docker/pulls/joshsagredo/syn-flood)](https://hub.docker.com/r/joshsagredo/syn-flood/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/joshsagredo/syn-flood)](https://goreportcard.com/report/github.com/joshsagredo/syn-flood)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=joshsagredo_syn-flood&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=joshsagredo_syn-flood)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=joshsagredo_syn-flood&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=joshsagredo_syn-flood)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=joshsagredo_syn-flood&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=joshsagredo_syn-flood)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=joshsagredo_syn-flood&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=joshsagredo_syn-flood)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=joshsagredo_syn-flood&metric=coverage)](https://sonarcloud.io/summary/new_code?id=joshsagredo_syn-flood)
+[![Release](https://img.shields.io/github/release/joshsagredo/syn-flood.svg)](https://github.com/joshsagredo/syn-flood/releases/latest)
+[![Go version](https://img.shields.io/github/go-mod/go-version/joshsagredo/syn-flood)](https://github.com/joshsagredo/syn-flood)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This project is developed with the objective of learning low level network operations with Golang. It starts a syn flood attack
@@ -55,7 +55,7 @@ Flags:
 
 ## Download
 ### Binary
-Binary can be downloaded from [Releases](https://github.com/bilalcaliskan/syn-flood/releases) page.
+Binary can be downloaded from [Releases](https://github.com/joshsagredo/syn-flood/releases) page.
 
 After then, you can simply run binary by providing required command line arguments:
 ```shell
@@ -70,15 +70,15 @@ $ sudo ./syn-flood --host foo.example.com --port 443
 ### Homebrew
 This project can be installed with [Homebrew](https://brew.sh/):
 ```shell
-$ brew tap bilalcaliskan/tap
-$ brew install bilalcaliskan/tap/syn-flood
+$ brew tap joshsagredo/tap
+$ brew install joshsagredo/tap/syn-flood
 $ sudo syn-flood --host foo.example.com --port 443 --floodType syn
 ```
 
 ### Docker
 Docker image can be downloaded with below command:
 ```shell
-$ docker run bilalcaliskan/syn-flood:latest
+$ docker run joshsagredo/syn-flood:latest
 ```
 
 ## Development

@@ -5,11 +5,11 @@ import (
 	"math/rand"
 	"net"
 
-	"github.com/bilalcaliskan/syn-flood/internal/logging"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
+	"github.com/joshsagredo/syn-flood/internal/logging"
 	"github.com/pkg/errors"
-	progressbar "github.com/schollz/progressbar/v3"
+	"github.com/schollz/progressbar/v3"
 	"go.uber.org/zap"
 	"golang.org/x/net/ipv4"
 )

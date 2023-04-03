@@ -1,10 +1,10 @@
 /*
-Copyright © 2022 bilalcaliskan bilalcaliskan@protonmail.com
+Copyright © 2022 joshsagredo joshsagredo@protonmail.com
 */
 package main
 
 import (
-	"github.com/bilalcaliskan/syn-flood/cmd"
+	"github.com/joshsagredo/syn-flood/cmd"
 )
 
 func main() {
