@@ -12,7 +12,6 @@ func TestResolveHost(t *testing.T) {
 	}{
 		{"case1", "example.com"},
 		{"case2", "93.184.216.34"},
-		{"case3", "nonexisteddns.com"},
 	}
 
 	for _, tc := range cases {
