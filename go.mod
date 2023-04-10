@@ -7,7 +7,7 @@ require (
 	github.com/google/gopacket v1.1.19
 	github.com/pkg/errors v0.9.1
 	github.com/schollz/progressbar/v3 v3.13.0
-	github.com/spf13/cobra v1.6.1
+	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.2
 	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.8.0
