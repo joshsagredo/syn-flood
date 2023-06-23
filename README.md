@@ -24,7 +24,7 @@ may cause. You agree that you use this software at your own risk.
 You need root access to run syn-flood
 
 syn-flood needs lots of open file descriptors while running so we need to increase it first. You can increase it like below
-temporarily. That works for both Macos and Linux:
+temporarily.
 
 ```shell
 $ sudo ulimit -S -n 2048000

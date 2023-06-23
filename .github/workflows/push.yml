@@ -35,10 +35,6 @@ jobs:
         run: make -s clean
 
   test:
-#    strategy:
-#      matrix:
-#        os: [ubuntu-latest, macos-latest]
-#    runs-on: ${{ matrix.os }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -95,10 +91,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -124,7 +117,7 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.66.0
+        uses: anothrNick/github-tag-action@1.67.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
@@ -163,5 +156,6 @@ jobs:
           version: latest
           args: release --rm-dist --config build/package/.goreleaser.yaml
         env:
+          GITHUB_USERNAME: ${{ github.repository_owner }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}

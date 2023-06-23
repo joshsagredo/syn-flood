@@ -25,15 +25,17 @@ builds:
       - darwin
     goarch:
       - amd64
-    binary: syn-flood
+    binary: "{{ .ProjectName }}"
     ldflags:
-      - -s -w -X github.com/joshsagredo/syn-flood/internal/version.gitVersion={{ .Version }} -X github.com/joshsagredo/syn-flood/internal/version.gitCommit={{ .ShortCommit }}  -X github.com/joshsagredo/syn-flood/internal/version.buildDate={{ .CommitDate }}
+      - -s -w -X github.com/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}/internal/version.gitVersion={{ .Version }}
+      - -s -w -X github.com/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}/internal/version.gitCommit={{ .ShortCommit }}
+      - -s -w -X github.com/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}/internal/version.buildDate={{ .CommitDate }}
     main: ./main.go
 
 dockers:
   - image_templates:
-      - "docker.io/joshsagredo/{{ .ProjectName }}:{{ .Version }}"
-      - "docker.io/joshsagredo/{{ .ProjectName }}:latest"
+      - "docker.io/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}:{{ .Version }}"
+      - "docker.io/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}:latest"
     dockerfile: build/package/Dockerfile.goreleaser
     goos: linux
     goarch: amd64
@@ -45,29 +47,17 @@ dockers:
       - --platform=linux/amd64
       - --label=org.opencontainers.image.title={{ .ProjectName }}
       - --label=org.opencontainers.image.description={{ .ProjectName }}
-      - --label=org.opencontainers.image.url=https://github.com/joshsagredo/syn-flood
-      - --label=org.opencontainers.image.source=https://github.com/joshsagredo/syn-flood
+      - --label=org.opencontainers.image.url=https://github.com/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}
+      - --label=org.opencontainers.image.source=https://github.com/{{ .Env.GITHUB_USERNAME }}/{{ .ProjectName }}
       - --label=org.opencontainers.image.version={{ .Version }}
       - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
       - --label=org.opencontainers.image.licenses=Apache
 
-brews:
-  - name: syn-flood
-    tap:
-      owner: joshsagredo
-      name: homebrew-tap
-      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-    folder: Formula
-    goarm: 6
-    homepage: https://github.com/joshsagredo/syn-flood
-    license: apache-2.0
-    description: syn-flood starts a syn flood attack with raw sockets. created for learning low level network ops
-
 release:
   github:
-    owner: joshsagredo
-    name: syn-flood
+    owner: "{{ .Env.GITHUB_USERNAME }}"
+    name: "{{ .ProjectName }}"
 
 changelog:
   sort: asc
