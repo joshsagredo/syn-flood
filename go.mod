@@ -10,7 +10,7 @@ require (
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.26.0
-	golang.org/x/net v0.16.0
+	golang.org/x/net v0.17.0
 )
 
 require (
